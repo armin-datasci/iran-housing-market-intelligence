@@ -1,0 +1,14 @@
+﻿relationship_id,from_table,from_column,to_table,to_column,cardinality,cross_filter_direction,active,nullable_fact_key,source_of_truth,notes
+rel_market_monthly_location,dim_location,location_key,mart_market_monthly,location_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_market_monthly_month,dim_month,month_key,mart_market_monthly,month_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_market_monthly_property,dim_property,property_key,mart_market_monthly,property_key,1:*,Single,True,True,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_market_monthly_regime,dim_price_regime,price_regime_key,mart_market_monthly,price_regime_key,1:*,Single,True,True,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_location_market_location,dim_location,location_key,mart_location_market,location_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_location_market_property,dim_property,property_key,mart_location_market,property_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_location_market_regime,dim_price_regime,price_regime_key,mart_location_market,price_regime_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_seller_regime,dim_price_regime,price_regime_key,mart_seller_type,price_regime_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_text_signals_regime,dim_price_regime,price_regime_key,mart_text_signals,price_regime_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_text_monthly_month,dim_month,month_key,mart_text_monthly,month_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_text_monthly_regime,dim_price_regime,price_regime_key,mart_text_monthly,price_regime_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_segment_profile_property,dim_property,property_key,mart_segment_profile,property_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.
+rel_segment_mix_month,dim_month,month_key,mart_segment_monthly_mix,month_key,1:*,Single,True,False,data/gold/metadata/gold_relationship_contract.csv,Dimension one-side -> mart many-side.

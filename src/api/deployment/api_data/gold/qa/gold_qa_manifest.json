@@ -1,0 +1,81 @@
+{
+  "version": "m4-gold-qa-v3.4-section29-status-location-handoff-hotfix",
+  "status": {
+    "overall_status": "PASS",
+    "ready": true,
+    "critical_failures": 0,
+    "review_count": 0,
+    "check_count": 120
+  },
+  "gold_data_contract_ready": true,
+  "ready_for_measure_dax_design": true,
+  "dashboard_metadata_status": "PENDING_M4_05_GENERATION",
+  "architecture": {
+    "dashboard_pages": [
+      {
+        "page_id": "P01",
+        "page_order": 1,
+        "page_name": "Executive Market Overview"
+      },
+      {
+        "page_id": "P02",
+        "page_order": 2,
+        "page_name": "Data Quality"
+      },
+      {
+        "page_id": "P03",
+        "page_order": 3,
+        "page_name": "Price Map"
+      },
+      {
+        "page_id": "P04",
+        "page_order": 4,
+        "page_name": "Supply and Price Trends"
+      },
+      {
+        "page_id": "P05",
+        "page_order": 5,
+        "page_name": "Amenities and Price Drivers"
+      },
+      {
+        "page_id": "P06",
+        "page_order": 6,
+        "page_name": "Seller Type Comparison"
+      },
+      {
+        "page_id": "P07",
+        "page_order": 7,
+        "page_name": "Text Signals"
+      },
+      {
+        "page_id": "P08",
+        "page_order": 8,
+        "page_name": "Market Segments"
+      }
+    ],
+    "gold_marts": 10,
+    "conformed_dimensions": 5,
+    "physical_relationships": 13,
+    "semantic_only_dimensions": [
+      "dim_user_type"
+    ]
+  },
+  "qa_scope": [
+    "artifact_completeness",
+    "schema_and_grain",
+    "dimension_integrity",
+    "referential_integrity",
+    "source_reconciliation",
+    "structural_contracts",
+    "section_29_pages",
+    "semantic_integrity",
+    "data_quality_page_status",
+    "legacy_contamination",
+    "spatial_privacy"
+  ],
+  "outputs": {
+    "checks": "data/gold/qa/gold_qa_checks.csv",
+    "technical_report": "reports/milestone_4/gold_qa/Technical_Report_M4_03_Gold_QA.md",
+    "quality_status": "data/gold/metadata/dashboard_quality_status.csv"
+  }
+}

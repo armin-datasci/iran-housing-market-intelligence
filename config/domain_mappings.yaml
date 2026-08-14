@@ -1,0 +1,35 @@
+version: domain-mappings-v2
+notes: >-
+  Shared business-domain mappings used by canonical M2/M3 modules. Exact source
+  category slugs are mapped once here so downstream scripts do not repeat them.
+
+property_families:
+  apartment:
+    label_fa: آپارتمان
+    categories: [apartment-sell, apartment-rent]
+  villa:
+    label_fa: خانه/ویلا
+    categories: [house-villa-sell, house-villa-rent]
+  land:
+    label_fa: زمین/کلنگی
+    categories: [plot-old]
+  commercial:
+    label_fa: اداری/تجاری
+    categories: [office-sell, office-rent, shop-sell, shop-rent]
+  industrial:
+    label_fa: صنعتی/کشاورزی/کسب‌وکار
+    categories: [industry-agriculture-business-sell, industry-agriculture-business-rent]
+  other:
+    label_fa: سایر
+    categories: []
+
+price_regimes:
+  sale: sale
+  rent_plus_deposit: rent_plus_deposit
+  full_deposit: full_deposit
+  rent_only: rent_only
+  rent_negotiable: rent_negotiable
+  rent_unknown_or_incomplete: rent_unknown_or_incomplete
+  temporary_rent: temporary_rent
+  service: service
+  unknown: unknown

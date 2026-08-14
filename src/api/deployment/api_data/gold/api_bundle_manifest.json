@@ -1,0 +1,114 @@
+{
+  "deployment_data_contract": "ihmi-fastapi-gold-readonly-v1",
+  "gold_source": "canonical data/gold",
+  "marts": 10,
+  "dimensions": 5,
+  "artifacts": [
+    {
+      "artifact": "mart_market_monthly",
+      "kind": "mart",
+      "rows": 33447,
+      "columns": 36,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_market_monthly.parquet"
+    },
+    {
+      "artifact": "mart_location_market",
+      "kind": "mart",
+      "rows": 1212,
+      "columns": 61,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_location_market.parquet"
+    },
+    {
+      "artifact": "mart_price_driver_effects",
+      "kind": "mart",
+      "rows": 14,
+      "columns": 23,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_price_driver_effects.parquet"
+    },
+    {
+      "artifact": "mart_price_driver_importance",
+      "kind": "mart",
+      "rows": 14,
+      "columns": 21,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_price_driver_importance.parquet"
+    },
+    {
+      "artifact": "mart_model_quality",
+      "kind": "mart",
+      "rows": 1340,
+      "columns": 32,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_model_quality.parquet"
+    },
+    {
+      "artifact": "mart_seller_type",
+      "kind": "mart",
+      "rows": 1,
+      "columns": 33,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_seller_type.parquet"
+    },
+    {
+      "artifact": "mart_text_signals",
+      "kind": "mart",
+      "rows": 6,
+      "columns": 27,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_text_signals.parquet"
+    },
+    {
+      "artifact": "mart_text_monthly",
+      "kind": "mart",
+      "rows": 48,
+      "columns": 20,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_text_monthly.parquet"
+    },
+    {
+      "artifact": "mart_segment_profile",
+      "kind": "mart",
+      "rows": 5,
+      "columns": 29,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_segment_profile.parquet"
+    },
+    {
+      "artifact": "mart_segment_monthly_mix",
+      "kind": "mart",
+      "rows": 40,
+      "columns": 18,
+      "staged_path": "src/api/deployment/api_data/gold/marts/mart_segment_monthly_mix.parquet"
+    },
+    {
+      "artifact": "dim_location",
+      "kind": "dimension",
+      "rows": 1608,
+      "columns": 10,
+      "staged_path": "src/api/deployment/api_data/gold/dimensions/dim_location.parquet"
+    },
+    {
+      "artifact": "dim_month",
+      "kind": "dimension",
+      "rows": 8,
+      "columns": 9,
+      "staged_path": "src/api/deployment/api_data/gold/dimensions/dim_month.parquet"
+    },
+    {
+      "artifact": "dim_property",
+      "kind": "dimension",
+      "rows": 17,
+      "columns": 8,
+      "staged_path": "src/api/deployment/api_data/gold/dimensions/dim_property.parquet"
+    },
+    {
+      "artifact": "dim_price_regime",
+      "kind": "dimension",
+      "rows": 9,
+      "columns": 6,
+      "staged_path": "src/api/deployment/api_data/gold/dimensions/dim_price_regime.parquet"
+    },
+    {
+      "artifact": "dim_user_type",
+      "kind": "dimension",
+      "rows": 2,
+      "columns": 3,
+      "staged_path": "src/api/deployment/api_data/gold/dimensions/dim_user_type.parquet"
+    }
+  ],
+  "privacy": "No exact coordinate columns are permitted in the staged deployment bundle."
+}

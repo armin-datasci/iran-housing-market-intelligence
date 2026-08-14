@@ -1,0 +1,34 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Secrets and local environment
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local/raw data and temporary files
+external_data/
+data/
+*.log
+
+# Generated heavy binary deliverables
+*.pbix
+*.mp4
+/outputs/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+*.tmp

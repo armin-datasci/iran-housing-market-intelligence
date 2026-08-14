@@ -1,0 +1,14 @@
+polars
+pyarrow
+pandas
+numpy
+scipy
+scikit-learn
+matplotlib
+PyYAML
+psutil
+jupyter
+pytest
+fastapi
+uvicorn
+joblib

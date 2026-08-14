@@ -1,0 +1,57 @@
+﻿page_id,filter_id,status,source_table,source_field,selection_mode,default_value,applies_to,implementation,notes
+P01,city,active,dim_location,city_display_name,single_or_all,All,market/location visuals,relationship + Active Location Level measure,Single city or All recommended; arbitrary multi-city median asking price is not available from pre-aggregated Gold.
+P01,neighborhood,conditional,dim_location,neighborhood_display_name,single_or_all,All,market/location visuals when city chosen,relationship + Active Location Level measure,Neighborhood overrides city level when selected.
+P01,property,fixed,dim_property,property_display_name,locked_label,Apartment,headline market KPIs,visual/page scope,Primary executive price/activity evidence is apartment-sale; do not imply cross-property price trend.
+P01,month,active,dim_month,month_label,single_or_all,All/latest,monthly/headline measures,relationship; latest-card measures use latest selected month,Sort by chronological_sort.
+P01,price_regime,fixed,dim_price_regime,price_regime_display_name,locked_label,Sale,headline market KPIs,visual/page scope,Primary executive price/activity evidence is sale asking price.
+P01,user_type,not_applicable,dim_user_type,user_type_display_name,single_or_all,All,none on executive analytical estimates,no physical relationship,User type is only semantically meaningful on P06 in final Gold.
+P01,minimum_valid_listings,active,p_MinValidN,MinValidN,single_select,30,reliable-location/hot-cold visuals,DAX display gate,Cannot weaken upstream reliability; temperature remains N>=100 even if user selects lower N.
+P02,city,not_applicable,dim_location,city_display_name,visible_no_interaction,All,none,disable visual interaction,Quality/readiness is upstream/global metadata and must not be falsely sliced.
+P02,neighborhood,not_applicable,dim_location,neighborhood_display_name,visible_no_interaction,All,none,disable visual interaction,Quality/readiness is upstream/global metadata and must not be falsely sliced.
+P02,property,not_applicable,dim_property,property_display_name,visible_no_interaction,All,none,disable visual interaction,Quality/readiness is upstream/global metadata and must not be falsely sliced.
+P02,month,not_applicable,dim_month,month_label,visible_no_interaction,All,none,disable visual interaction,Quality/readiness is upstream/global metadata and must not be falsely sliced.
+P02,price_regime,not_applicable,dim_price_regime,price_regime_display_name,visible_no_interaction,All,none,disable visual interaction,Quality/readiness is upstream/global metadata and must not be falsely sliced.
+P02,user_type,not_applicable,dim_user_type,user_type_display_name,visible_no_interaction,All,none,disable visual interaction,Quality/readiness is upstream/global metadata and must not be falsely sliced.
+P02,minimum_valid_listings,not_applicable,p_MinValidN,MinValidN,visible_no_interaction,30,none,disable visual interaction,Quality status is not recalculated by a presentation sample threshold.
+P03,city,active,dim_location,city_display_name,single_or_all,All,map/rankings,relationship,All cities supported; four-city restriction is only a hidden filter for final Top-5 presentation visuals.
+P03,neighborhood,active,dim_location,neighborhood_display_name,single_or_all,All,map/rankings,relationship,Use within selected city when possible.
+P03,property,fixed,dim_property,property_display_name,locked_label,Apartment,all P03 visuals,page scope,Canonical price map and temperature are apartment-sale.
+P03,month,fixed,dim_month,month_label,locked_label,Core period,all P03 visuals,no month relationship to location mart,Location map/temperature are full-core-period summaries; use P04 for monthly trends.
+P03,price_regime,fixed,dim_price_regime,price_regime_display_name,locked_label,Sale,all P03 visuals,page scope,Canonical map/temperature are sale asking-price analyses.
+P03,user_type,not_applicable,dim_user_type,user_type_display_name,visible_no_interaction,All,none,no physical relationship,Seller type not part of map grain.
+P03,minimum_valid_listings,active,p_MinValidN,MinValidN,single_select,30,price/temperature rankings,DAX display gate,"Uses max(user threshold, upstream canonical minimum)."
+P04,city,active,dim_location,city_display_name,single_or_all,All,trend visuals,relationship + Active Location Level,Single city or All recommended.
+P04,neighborhood,active,dim_location,neighborhood_display_name,single_or_all,All,trend visuals,relationship + Active Location Level,Neighborhood overrides city when selected.
+P04,property,fixed,dim_property,property_display_name,locked_label,Apartment,primary price+activity trend,series_kind=price_and_supply,Validated primary paired trend is apartment-sale. Optional supply-only context measures ignore property.
+P04,month,active,dim_month,month_label,multi_or_all,All,trend axis/window,relationship,Core period May-Dec 2024.
+P04,price_regime,fixed,dim_price_regime,price_regime_display_name,locked_label,Sale,primary price+activity trend,series_kind=price_and_supply,Optional all-market supply context ignores regime.
+P04,user_type,not_applicable,dim_user_type,user_type_display_name,visible_no_interaction,All,none,no physical relationship,Final 10-mart Gold does not contain a user-type monthly supply mart.
+P04,minimum_valid_listings,conditional,p_MinValidN,MinValidN,single_select,30,price reliability / small-N trend points,DAX display gate,Does not change listing-count series; can hide/flag low-N price points.
+P05,city,not_applicable,dim_location,city_display_name,visible_no_interaction,All,fixed model estimates,no physical relationship / disable interaction,Held-out adjusted estimates and permutation importance are fixed and must not appear to refit under slicers.
+P05,neighborhood,not_applicable,dim_location,neighborhood_display_name,visible_no_interaction,All,fixed model estimates,no physical relationship / disable interaction,Held-out adjusted estimates and permutation importance are fixed and must not appear to refit under slicers.
+P05,property,not_applicable,dim_property,property_display_name,visible_no_interaction,All,fixed model estimates,no physical relationship / disable interaction,Held-out adjusted estimates and permutation importance are fixed and must not appear to refit under slicers.
+P05,month,not_applicable,dim_month,month_label,visible_no_interaction,All,fixed model estimates,no physical relationship / disable interaction,Held-out adjusted estimates and permutation importance are fixed and must not appear to refit under slicers.
+P05,price_regime,not_applicable,dim_price_regime,price_regime_display_name,visible_no_interaction,All,fixed model estimates,no physical relationship / disable interaction,Held-out adjusted estimates and permutation importance are fixed and must not appear to refit under slicers.
+P05,user_type,not_applicable,dim_user_type,user_type_display_name,visible_no_interaction,All,fixed model estimates,no physical relationship / disable interaction,Held-out adjusted estimates and permutation importance are fixed and must not appear to refit under slicers.
+P05,minimum_valid_listings,conditional,p_MinValidN,MinValidN,single_select,30,effect/importance/error rows,DAX display gate,Only hides small-N rows; does not refit the model or change coefficients.
+P06,city,not_applicable,dim_location,city_display_name,visible_no_interaction,All,fixed seller contrast,no physical relationship,Final seller mart is a single fixed contrast row.
+P06,neighborhood,not_applicable,dim_location,neighborhood_display_name,visible_no_interaction,All,fixed seller contrast,no physical relationship,Final seller mart is a single fixed contrast row.
+P06,property,not_applicable,dim_property,property_display_name,visible_no_interaction,All,fixed seller contrast,no physical relationship,Final seller mart is a single fixed contrast row.
+P06,month,not_applicable,dim_month,month_label,visible_no_interaction,All,fixed seller contrast,no physical relationship,Final seller mart is a single fixed contrast row.
+P06,price_regime,fixed,dim_price_regime,price_regime_display_name,locked_label,Sale,all seller visuals,physical relationship + fixed sale,Seller comparison is sale-only.
+P06,user_type,conditional,dim_user_type,user_type_display_name,single_or_all,All,descriptive selected-user cards only,disconnected SWITCH measures,Must not change the fixed adjusted agency-vs-personal effect.
+P06,minimum_valid_listings,conditional,p_MinValidN,MinValidN,single_select,30,descriptive sample guard,DAX display/information gate,No model refit.
+P07,city,not_applicable,dim_location,city_display_name,visible_no_interaction,All,fixed text effects / monthly prevalence,no physical relationship,No validated sliced effect at this grain.
+P07,neighborhood,not_applicable,dim_location,neighborhood_display_name,visible_no_interaction,All,fixed text effects / monthly prevalence,no physical relationship,No validated sliced effect at this grain.
+P07,property,not_applicable,dim_property,property_display_name,visible_no_interaction,All,fixed text effects / monthly prevalence,no physical relationship,No validated sliced effect at this grain.
+P07,user_type,not_applicable,dim_user_type,user_type_display_name,visible_no_interaction,All,fixed text effects / monthly prevalence,no physical relationship,No validated sliced effect at this grain.
+P07,month,conditional,dim_month,month_label,multi_or_all,All,monthly prevalence only,relationship to mart_text_monthly,Must not alter fixed mart_text_signals adjusted effects.
+P07,price_regime,fixed,dim_price_regime,price_regime_display_name,locked_label,Sale,all text visuals,physical relation,Validated text-price analysis is sale-only.
+P07,minimum_valid_listings,active,p_MinValidN,MinValidN,single_select,30,signal/frequency display gate,DAX display gate,Manual precision and analysis PASS remain mandatory regardless of user N.
+P08,city,not_applicable,dim_location,city_display_name,visible_no_interaction,All,segment profile/mix,no physical relationship,Current final segment marts do not publish these dimensions.
+P08,neighborhood,not_applicable,dim_location,neighborhood_display_name,visible_no_interaction,All,segment profile/mix,no physical relationship,Current final segment marts do not publish these dimensions.
+P08,user_type,not_applicable,dim_user_type,user_type_display_name,visible_no_interaction,All,segment profile/mix,no physical relationship,Current final segment marts do not publish these dimensions.
+P08,property,conditional,dim_property,property_display_name,single_or_all,All,segment profile visuals only,relationship to mart_segment_profile,Does not filter monthly mix because segment mix has no property key.
+P08,month,conditional,dim_month,month_label,multi_or_all,All,monthly mix only,relationship to mart_segment_monthly_mix,Does not alter frozen segment profile.
+P08,price_regime,fixed,dim_price_regime,price_regime_display_name,locked_label,Sale,all segment visuals,semantic fixed scope,Final segmentation is sale-only; no physical regime relationship is added.
+P08,minimum_valid_listings,active,p_MinValidN,MinValidN,single_select,30,profile/mix display gate,DAX display gate,Does not change segment assignment/method.

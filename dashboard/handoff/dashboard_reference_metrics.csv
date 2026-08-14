@@ -1,0 +1,25 @@
+﻿metric_id,expected_value,tolerance,value_type,source_analysis,dashboard_source,notes
+architecture.gold_marts,10,0,count,Gold v3.4 contract,data/gold/metadata/gold_artifact_contract.csv,Must equal 10
+architecture.dimensions,5,0,count,Gold v3.4 contract,data/gold/metadata/gold_artifact_contract.csv,Must equal 5
+architecture.physical_relationships,13,0,count,Gold v3.4 contract,data/gold/metadata/gold_relationship_contract.csv,All 1:* Single Active
+quality.gold_qa_status,PASS,exact,text,Gold QA,data/gold/qa/gold_qa_manifest.json,Gold data contract must be ready
+avm.primary_test_n,53615,0,count,M3 Price Drivers,mart_model_quality,Primary Ridge test split
+avm.primary_test_r2_log,0.277012,0.0005,number,M3 Price Drivers,mart_model_quality,Primary Ridge test split
+avm.primary_test_median_ape_pct,33.612925,0.01,pct_points,M3 Price Drivers,mart_model_quality,Primary Ridge test split
+seller.adjusted_agency_personal_diff_pct,28.463071,0.01,pct_points,M3 Seller Type,mart_seller_type,Fixed observational adjusted contrast
+seller.agency_n,114843,0,count,M3 Seller Type,mart_seller_type,
+seller.personal_n,11050,0,count,M3 Seller Type,mart_seller_type,
+text.validated_signal_count,6,0,count,M3 Text Analysis,mart_text_signals,new_build;unused;urgent;exchange;below_market;migration_sale
+segments.segment_count,5,0,count,SEG-27 final,mart_segment_profile,SEG01-SEG05
+temperature.four_city_reliable_hot_count,17,0,count,M3 Market Temperature,mart_location_market + dim_location,"Neighborhood, four-city, canonical reliability"
+temperature.four_city_reliable_cold_count,30,0,count,M3 Market Temperature,mart_location_market + dim_location,"Neighborhood, four-city, canonical reliability"
+hot.karaj.golshahrvila,75.940594,0.01,score,M3 Market Temperature,mart_location_market,Top-5 four-city reliable HOT
+hot.mashhad.daneshjoo,70.039604,0.01,score,M3 Market Temperature,mart_location_market,Top-5 four-city reliable HOT
+hot.isfahan.eshragh,66.343706,0.01,score,M3 Market Temperature,mart_location_market,Top-5 four-city reliable HOT
+hot.tehran.zahir-abad,63.743281,0.01,score,M3 Market Temperature,mart_location_market,Top-5 four-city reliable HOT
+hot.tehran.seyed-khandan,62.831966,0.01,score,M3 Market Temperature,mart_location_market,Top-5 four-city reliable HOT
+cold.tehran.parastar,-89.007956,0.01,score,M3 Market Temperature,mart_location_market,Bottom-5 four-city reliable COLD
+cold.karaj.andishehnewcity,-88.352900,0.01,score,M3 Market Temperature,mart_location_market,Bottom-5 four-city reliable COLD
+cold.tehran.north-sohrevardi,-85.173267,0.01,score,M3 Market Temperature,mart_location_market,Bottom-5 four-city reliable COLD
+cold.karaj.mehrshar-1,-82.835926,0.01,score,M3 Market Temperature,mart_location_market,Bottom-5 four-city reliable COLD
+cold.tehran.pirouzi,-80.415842,0.01,score,M3 Market Temperature,mart_location_market,Bottom-5 four-city reliable COLD

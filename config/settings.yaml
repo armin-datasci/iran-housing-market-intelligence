@@ -1,0 +1,87 @@
+project:
+  name: iran-housing-market-intelligence
+  random_seed: 42
+
+paths:
+  raw_source: external_data/real_estate_ads.csv
+  silver_master: data/silver/silver_master.parquet
+  gold_root: data/gold
+  outputs_root: outputs
+
+analysis:
+  core_period:
+    start: '2024-05-01'
+    end: '2024-12-31'
+  forward_split:
+    train_months: [2024-05, 2024-06, 2024-07, 2024-08, 2024-09, 2024-10]
+    validation_months: [2024-11]
+    test_months: [2024-12]
+  minimum_valid_listings:
+    default: 30
+    sensitivity: [10, 20, 30, 50, 100]
+  rent_equivalence_k_toman:
+    low: 25000
+    base: 30000
+    high: 35000
+
+milestone_2:
+  outliers:
+    canonical_iqr_multiplier: 3.0
+    sensitivity_iqr_multiplier: 2.0
+    min_local_group_rows: 50
+    min_fallback_group_rows: 200
+  duplicates:
+    medium_area_bin_sqm: 5.0
+    medium_price_bin_toman: 10000000
+  versions:
+    price_regime: price-regime-v1
+    deduplication: deduplication-v2
+    outlier: outlier-policy-m2-v2
+    quality: quality-gate-m2-v2
+    rent_equivalent: rent-equivalent-sensitivity-v1
+    silver_master: silver-master-v1
+
+contracts:
+  price_unit: toman_assumed_unconfirmed
+  operational_currency: toman
+  price_observation_type: asking_price
+  factor_of_ten_conversion_applied: false
+  publish_exact_coordinates: false
+
+milestone_3:
+  market_temperature:
+    price_weight: 0.60
+    supply_tightness_weight: 0.40
+    hot_percentile: 0.80
+    cold_percentile: 0.20
+    minimum_months: 3
+  models:
+    ridge_alphas: [0.1, 1.0, 10.0, 100.0]
+    one_hot_min_frequency: 50
+    alpha_selection_max_rows: 120000
+    permutation_sample_rows: 10000
+    rf_sensitivity_max_rows: 60000
+  seller_comparison:
+    max_crossfit_rows: 150000
+    crossfit_folds: 5
+    minimum_seller_n_per_stratum: 5
+    ridge_alpha: 10.0
+  text:
+    validation_sample_per_keyword: 40
+    minimum_reviewed_per_keyword: 20
+    precision_threshold: 0.80
+  segmentation:
+    k_min: 3
+    k_max: 8
+    min_cluster_share: 0.03
+    min_stability_ari: 0.70
+    min_silhouette: 0.15
+    min_calinski_harabasz: 100.0
+    max_davies_bouldin: 2.5
+    selection_sample: 60000
+    metric_sample: 5000
+    stability_train_sample: 30000
+    stability_eval_sample: 5000
+    stability_runs: 3
+    reference_min_n: 30
+    min_optional_feature_coverage: 0.50

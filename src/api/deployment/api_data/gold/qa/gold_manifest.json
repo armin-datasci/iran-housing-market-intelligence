@@ -1,0 +1,117 @@
+{
+  "version": "m4-gold-v3.4-section29-status-location-handoff-hotfix",
+  "status": {
+    "overall_status": "PASS",
+    "ready": true,
+    "critical_failures": 0,
+    "review_count": 0,
+    "check_count": 53
+  },
+  "gold_data_ready": true,
+  "ready_for_metadata_design": true,
+  "dashboard_metadata_status": "PENDING_M4_05_GENERATION",
+  "gold_structure_removed_on_request": [],
+  "dashboard_metadata_removed_on_request": [],
+  "architecture": {
+    "dashboard_pages": [
+      {
+        "page_id": "P01",
+        "page_order": 1,
+        "page_name": "Executive Market Overview"
+      },
+      {
+        "page_id": "P02",
+        "page_order": 2,
+        "page_name": "Data Quality"
+      },
+      {
+        "page_id": "P03",
+        "page_order": 3,
+        "page_name": "Price Map"
+      },
+      {
+        "page_id": "P04",
+        "page_order": 4,
+        "page_name": "Supply and Price Trends"
+      },
+      {
+        "page_id": "P05",
+        "page_order": 5,
+        "page_name": "Amenities and Price Drivers"
+      },
+      {
+        "page_id": "P06",
+        "page_order": 6,
+        "page_name": "Seller Type Comparison"
+      },
+      {
+        "page_id": "P07",
+        "page_order": 7,
+        "page_name": "Text Signals"
+      },
+      {
+        "page_id": "P08",
+        "page_order": 8,
+        "page_name": "Market Segments"
+      }
+    ],
+    "gold_marts": 10,
+    "conformed_dimensions": 5,
+    "physical_relationships": 13,
+    "semantic_only_dimensions": [
+      "dim_user_type"
+    ],
+    "minimum_n_parameter": "disconnected BI parameter; not a Gold dimension",
+    "api_policy": "API is built only after Dashboard freeze and consumes Gold only."
+  },
+  "contracts": {
+    "gold_rule": "select, rename, standardize, merge compatible presentation grains, and aggregate accepted assignments only",
+    "no_new_cleaning": true,
+    "no_new_model_fit": true,
+    "no_statistical_retesting": true,
+    "no_exact_or_aggregate_coordinates_in_gold": true,
+    "asking_price_not_transaction_price": true,
+    "market_temperature_is_listing_market_proxy": true,
+    "market_temperature_ranking_universe": "all eligible entities within entity level",
+    "four_city_scope_role": "presentation/section-28 attribute only; never used to recompute canonical ranking",
+    "segment_fallback_wording": "Market Types / Descriptive Typology"
+  },
+  "upstream_versions": {
+    "monthly": "m3-monthly-market-v1.1-apartment-temperature-aligned",
+    "market_map": "m3-market-map-v1.5-balanced-four-city-figures",
+    "temperature": "m3-market-temperature-v1.3-frozen-final",
+    "price_drivers": "m3-price-drivers-v1.1-model-qa",
+    "seller": "m3-seller-comparison-v1",
+    "text": "m3-text-price-signals-v1.4-fdr-forest-layout",
+    "segments": "m3-market-segmentation-v1.5-layout-semantic-labels"
+  },
+  "outputs": {
+    "marts": {
+      "mart_market_monthly": "data/gold/marts/mart_market_monthly.parquet",
+      "mart_location_market": "data/gold/marts/mart_location_market.parquet",
+      "mart_price_driver_effects": "data/gold/marts/mart_price_driver_effects.parquet",
+      "mart_price_driver_importance": "data/gold/marts/mart_price_driver_importance.parquet",
+      "mart_model_quality": "data/gold/marts/mart_model_quality.parquet",
+      "mart_seller_type": "data/gold/marts/mart_seller_type.parquet",
+      "mart_text_signals": "data/gold/marts/mart_text_signals.parquet",
+      "mart_text_monthly": "data/gold/marts/mart_text_monthly.parquet",
+      "mart_segment_profile": "data/gold/marts/mart_segment_profile.parquet",
+      "mart_segment_monthly_mix": "data/gold/marts/mart_segment_monthly_mix.parquet"
+    },
+    "dimensions": {
+      "dim_location": "data/gold/dimensions/dim_location.parquet",
+      "dim_month": "data/gold/dimensions/dim_month.parquet",
+      "dim_property": "data/gold/dimensions/dim_property.parquet",
+      "dim_price_regime": "data/gold/dimensions/dim_price_regime.parquet",
+      "dim_user_type": "data/gold/dimensions/dim_user_type.parquet"
+    },
+    "artifact_contract": "data/gold/metadata/gold_artifact_contract.csv",
+    "relationship_contract": "data/gold/metadata/gold_relationship_contract.csv",
+    "page_registry": "data/gold/metadata/dashboard_page_registry.csv",
+    "quality_status": "data/gold/metadata/dashboard_quality_status.csv",
+    "lineage": "data/gold/metadata/gold_source_lineage.csv",
+    "inventory": "data/gold/metadata/gold_artifact_inventory.csv",
+    "checks": "data/gold/qa/gold_checks.csv"
+  },
+  "elapsed_seconds": 1.302
+}

@@ -1,0 +1,12 @@
+// Recommended calculated column in dim_location for text-based geocoding.
+// Set Data Category = Place. Do not add exact coordinates to Gold or the semantic model.
+
+dim_location[Geocode Location] =
+SWITCH(
+    TRUE(),
+    dim_location[location_level] = "national", "Iran",
+    dim_location[location_level] = "city", dim_location[city_display_name] & ", Iran",
+    dim_location[location_level] = "neighborhood",
+        dim_location[neighborhood_display_name] & ", " & dim_location[city_display_name] & ", Iran",
+    dim_location[location_display_name] & ", Iran"
+)

@@ -1,0 +1,362 @@
+// IHMI canonical Power BI measures
+// Source: dashboard_measure_catalog.csv
+// Create on z_Measures and assign the listed display folders/formats.
+
+// CTL_001 | Folder: 00 Controls | Pages: P01;P03;P04;P05;P06;P07;P08 | Format: 0
+[Selected Min Valid N] =
+SELECTEDVALUE(p_MinValidN[MinValidN], 30)
+
+// CTL_002 | Folder: 00 Controls | Pages: P01;P04 | Format: General
+[Active Location Level] =
+VAR NeighborhoodFiltered = ISFILTERED(dim_location[neighborhood_slug])
+VAR CityFiltered = ISFILTERED(dim_location[city_slug])
+RETURN
+    SWITCH(TRUE(), NeighborhoodFiltered, "neighborhood", CityFiltered, "city", "national")
+
+// MKT_001 | Folder: 01 Market Trends | Pages: P01;P04 | Format: #,##0
+[Trend Supply Listings] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        SUM(mart_market_monthly[deduplicated_listing_count]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_002 | Folder: 01 Market Trends | Pages: P04 | Format: #,##0
+[Trend Raw Supply Listings] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        SUM(mart_market_monthly[raw_listing_count]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_003 | Folder: 01 Market Trends | Pages: P01;P04 | Format: #,##0
+[Trend Valid Price Listings] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        SUM(mart_market_monthly[price_listing_n]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_004 | Folder: 01 Market Trends | Pages: P01;P04 | Format: #,##0
+[Trend Median Asking PSM] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[median_asking_price_per_sqm_toman]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_005 | Folder: 01 Market Trends | Pages: P04 | Format: 0.0\%
+[Trend Supply MoM %] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[deduplicated_supply_mom_pct]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_006 | Folder: 01 Market Trends | Pages: P04 | Format: 0.0\%
+[Trend Price MoM %] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[median_price_mom_pct]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_007 | Folder: 01 Market Trends | Pages: P04 | Format: 0.0%
+[Trend Duplicate Reduction %] =
+VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[duplicate_supply_reduction_rate]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )
+
+// MKT_008 | Folder: 01 Market Trends | Pages: P04 | Format: 0
+[Trend Price Eligible] =
+VAR Level = [Active Location Level]
+VAR UserMin = [Selected Min Valid N]
+VAR N = CALCULATE(MAX(mart_market_monthly[price_listing_n]), KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level))
+VAR Reliable = CALCULATE(MAX(mart_market_monthly[price_reliable_flag]), KEEPFILTERS(mart_market_monthly[series_kind] = "price_and_supply"),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level))
+RETURN IF(Reliable = TRUE() && N >= UserMin, 1, 0)
+
+// MKT_009 | Folder: 01 Market Trends | Pages: P01 | Format: #,##0
+[Latest Supply Listings] =
+VAR LatestMonth = MAXX(ALLSELECTED(dim_month), dim_month[month_key])
+RETURN CALCULATE([Trend Supply Listings], KEEPFILTERS(dim_month[month_key] = LatestMonth))
+
+// MKT_010 | Folder: 01 Market Trends | Pages: P01 | Format: #,##0
+[Latest Valid Price Listings] =
+VAR LatestMonth = MAXX(ALLSELECTED(dim_month), dim_month[month_key])
+RETURN CALCULATE([Trend Valid Price Listings], KEEPFILTERS(dim_month[month_key] = LatestMonth))
+
+// MKT_011 | Folder: 01 Market Trends | Pages: P01 | Format: #,##0
+[Latest Median Asking PSM] =
+VAR LatestMonth = MAXX(ALLSELECTED(dim_month), dim_month[month_key])
+RETURN CALCULATE([Trend Median Asking PSM], KEEPFILTERS(dim_month[month_key] = LatestMonth))
+
+// LOC_001 | Folder: 02 Location & Temperature | Pages: P03 | Format: #,##0
+[Location Asking PSM] =
+MAX(mart_location_market[median_asking_price_per_sqm_toman])
+
+// LOC_002 | Folder: 02 Location & Temperature | Pages: P03 | Format: #,##0
+[Location Price N] =
+MAX(mart_location_market[valid_price_n])
+
+// LOC_003 | Folder: 02 Location & Temperature | Pages: P01;P03 | Format: 0
+[Location Price Eligible] =
+VAR UserMin = [Selected Min Valid N]
+VAR N = MAX(mart_location_market[valid_price_n])
+VAR CanonicalMin = COALESCE(MAX(mart_location_market[minimum_n_threshold]), 0)
+VAR RequiredN = MAX(UserMin, CanonicalMin)
+VAR Reliable = MAX(mart_location_market[reliable_flag])
+RETURN IF(Reliable = TRUE() && N >= RequiredN, 1, 0)
+
+// LOC_004 | Folder: 02 Location & Temperature | Pages: P01;P03 | Format: #,##0
+[Reliable Neighborhood Count] =
+VAR UserMin = [Selected Min Valid N]
+RETURN
+    COUNTROWS(
+        FILTER(
+            mart_location_market,
+            mart_location_market[entity_level] = "neighborhood"
+                && mart_location_market[price_map_available_flag] = TRUE()
+                && mart_location_market[reliable_flag] = TRUE()
+                && mart_location_market[valid_price_n] >= MAX(UserMin, mart_location_market[minimum_n_threshold])
+        )
+    )
+
+// LOC_005 | Folder: 02 Location & Temperature | Pages: P01;P03 | Format: 0.0
+[Temperature Score] =
+MAX(mart_location_market[market_temperature_score])
+
+// LOC_006 | Folder: 02 Location & Temperature | Pages: P01;P03 | Format: 0.0
+[Cold Sort Score] =
+-[Temperature Score]
+
+// LOC_007 | Folder: 02 Location & Temperature | Pages: P01;P03 | Format: #,##0
+[Temperature Sample N] =
+MAX(mart_location_market[temperature_sample_n])
+
+// LOC_008 | Folder: 02 Location & Temperature | Pages: P01;P03 | Format: 0
+[Temperature Eligible] =
+VAR UserMin = [Selected Min Valid N]
+VAR N = MAX(mart_location_market[temperature_sample_n])
+VAR CanonicalMin = COALESCE(MAX(mart_location_market[temperature_minimum_n]), 0)
+VAR RequiredN = MAX(UserMin, CanonicalMin)
+VAR CanonicalEligible = MAX(mart_location_market[temperature_reliability_eligible_flag])
+RETURN IF(CanonicalEligible = TRUE() && N >= RequiredN, 1, 0)
+
+// LOC_010 | Folder: 02 Location & Temperature | Pages: P03 | Format: 0.0\%
+[Temperature Price Trend % per Month] =
+MAX(mart_location_market[price_trend_pct_per_month])
+
+// LOC_011 | Folder: 02 Location & Temperature | Pages: P03 | Format: 0.0\%
+[Temperature Listing Activity Trend % per Month] =
+MAX(mart_location_market[listing_activity_trend_pct_per_month])
+
+// QLT_001 | Folder: 03 Data Quality | Pages: P01;P02 | Format: General
+[Pipeline Readiness Status] =
+VAR FailRows = CALCULATE(COUNTROWS(dashboard_quality_status), dashboard_quality_status[overall_status] = "FAIL")
+VAR NonReadyRows = CALCULATE(COUNTROWS(dashboard_quality_status), dashboard_quality_status[ready] = FALSE())
+VAR ReviewRows = CALCULATE(COUNTROWS(dashboard_quality_status), dashboard_quality_status[overall_status] = "REVIEW")
+RETURN
+    IF(FailRows > 0 || NonReadyRows > 0, "FAIL", IF(ReviewRows > 0, "READY / REVIEW", "READY / PASS"))
+
+// QLT_002 | Folder: 03 Data Quality | Pages: P01;P02 | Format: General
+[Gold QA Status] =
+CALCULATE(SELECTEDVALUE(dashboard_quality_status[overall_status]), dashboard_quality_status[stage] = "M4", dashboard_quality_status[component] = "Gold QA")
+
+// QLT_003 | Folder: 03 Data Quality | Pages: P02 | Format: #,##0
+[Quality Critical Failures] =
+SUMX(dashboard_quality_status, COALESCE(dashboard_quality_status[critical_failures], 0))
+
+// QLT_004 | Folder: 03 Data Quality | Pages: P02 | Format: #,##0
+[Quality Review Count] =
+SUMX(dashboard_quality_status, COALESCE(dashboard_quality_status[review_count], 0))
+
+// DRV_001 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.0\%
+[Driver Adjusted Effect %] =
+MAX(mart_price_driver_effects[adjusted_effect_pct])
+
+// DRV_002 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.0\%
+[Driver CI Low %] =
+MAX(mart_price_driver_effects[ci_lower_pct])
+
+// DRV_003 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.0\%
+[Driver CI High %] =
+MAX(mart_price_driver_effects[ci_upper_pct])
+
+// DRV_004 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: #,##0
+[Driver Sample N] =
+MAX(mart_price_driver_effects[sample_n])
+
+// DRV_005 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.000
+[Permutation Importance] =
+MAX(mart_price_driver_importance[permutation_importance])
+
+// DRV_006 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.000
+[Permutation Importance SD] =
+MAX(mart_price_driver_importance[permutation_importance_sd])
+
+// AVM_001 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.000
+[Primary Test R2 Log] =
+CALCULATE(MAX(mart_model_quality[r2_log]), mart_model_quality[record_type] = "primary_diagnostics", mart_model_quality[model_name] = "ridge", mart_model_quality[evaluation_split] = "test", mart_model_quality[is_primary_model] = TRUE())
+
+// AVM_003 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.0\%
+[Primary Test Median APE %] =
+CALCULATE(MAX(mart_model_quality[median_ape_pct]), mart_model_quality[record_type] = "primary_diagnostics", mart_model_quality[model_name] = "ridge", mart_model_quality[evaluation_split] = "test", mart_model_quality[is_primary_model] = TRUE())
+
+// AVM_004 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.0\%
+[Primary Test P90 APE %] =
+CALCULATE(MAX(mart_model_quality[p90_ape_pct]), mart_model_quality[record_type] = "primary_diagnostics", mart_model_quality[model_name] = "ridge", mart_model_quality[evaluation_split] = "test", mart_model_quality[is_primary_model] = TRUE())
+
+// AVM_005 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: 0.0\%
+[Primary Test Within 30 %] =
+CALCULATE(MAX(mart_model_quality[within_30_pct]), mart_model_quality[record_type] = "primary_diagnostics", mart_model_quality[model_name] = "ridge", mart_model_quality[evaluation_split] = "test", mart_model_quality[is_primary_model] = TRUE())
+
+// AVM_006 | Folder: 04 Price Drivers & AVM | Pages: P05 | Format: #,##0
+[Primary Test N] =
+CALCULATE(MAX(mart_model_quality[n]), mart_model_quality[record_type] = "primary_diagnostics", mart_model_quality[model_name] = "ridge", mart_model_quality[evaluation_split] = "test", mart_model_quality[is_primary_model] = TRUE())
+
+// SEL_001 | Folder: 05 Seller | Pages: P06 | Format: #,##0
+[Agency Listing N] =
+MAX(mart_seller_type[agency_n])
+
+// SEL_002 | Folder: 05 Seller | Pages: P06 | Format: #,##0
+[Personal Listing N] =
+MAX(mart_seller_type[personal_n])
+
+// SEL_005 | Folder: 05 Seller | Pages: P06 | Format: #,##0
+[Agency Median Asking PSM] =
+MAX(mart_seller_type[agency_median_asking_psm_toman])
+
+// SEL_006 | Folder: 05 Seller | Pages: P06 | Format: #,##0
+[Personal Median Asking PSM] =
+MAX(mart_seller_type[personal_median_asking_psm_toman])
+
+// SEL_007 | Folder: 05 Seller | Pages: P06 | Format: 0.0\%
+[Seller Raw Difference %] =
+MAX(mart_seller_type[raw_median_difference_pct])
+
+// SEL_008 | Folder: 05 Seller | Pages: P06 | Format: 0.0\%
+[Seller Adjusted Difference %] =
+MAX(mart_seller_type[adjusted_crossfit_difference_pct])
+
+// SEL_009 | Folder: 05 Seller | Pages: P06 | Format: 0.0\%
+[Seller Adjusted CI Low %] =
+MAX(mart_seller_type[adjusted_ci_low_pct])
+
+// SEL_010 | Folder: 05 Seller | Pages: P06 | Format: 0.0\%
+[Seller Adjusted CI High %] =
+MAX(mart_seller_type[adjusted_ci_high_pct])
+
+// SEL_011 | Folder: 05 Seller | Pages: P06 | Format: #,##0
+[Selected Seller Listing N] =
+VAR U = SELECTEDVALUE(dim_user_type[user_type])
+VAR A = MAX(mart_seller_type[agency_label])
+VAR P = MAX(mart_seller_type[personal_label])
+RETURN SWITCH(TRUE(), ISBLANK(U), [Agency Listing N] + [Personal Listing N], U = A, [Agency Listing N], U = P, [Personal Listing N], BLANK())
+
+// SEL_012 | Folder: 05 Seller | Pages: P06 | Format: #,##0
+[Selected Seller Median Asking PSM] =
+VAR U = SELECTEDVALUE(dim_user_type[user_type])
+VAR A = MAX(mart_seller_type[agency_label])
+VAR P = MAX(mart_seller_type[personal_label])
+RETURN SWITCH(TRUE(), U = A, [Agency Median Asking PSM], U = P, [Personal Median Asking PSM], BLANK())
+
+// TXT_001 | Folder: 06 Text Signals | Pages: P07 | Format: #,##0
+[Validated Text Signal Count] =
+VAR UserMin = [Selected Min Valid N]
+RETURN COUNTROWS(FILTER(mart_text_signals, mart_text_signals[precision_status] = "PASS" && mart_text_signals[analysis_status] = "PASS" && mart_text_signals[sample_n] >= UserMin))
+
+// TXT_002 | Folder: 06 Text Signals | Pages: P07 | Format: 0.0\%
+[Text Adjusted Effect %] =
+MAX(mart_text_signals[adjusted_effect_pct])
+
+// TXT_003 | Folder: 06 Text Signals | Pages: P07 | Format: 0.0\%
+[Text CI Low %] =
+MAX(mart_text_signals[adjusted_ci_low_pct])
+
+// TXT_004 | Folder: 06 Text Signals | Pages: P07 | Format: 0.0\%
+[Text CI High %] =
+MAX(mart_text_signals[adjusted_ci_high_pct])
+
+// TXT_005 | Folder: 06 Text Signals | Pages: P07 | Format: 0.0%
+[Text Manual Precision %] =
+MAX(mart_text_signals[manual_precision])
+
+// TXT_006 | Folder: 06 Text Signals | Pages: P07 | Format: 0.000
+[Text Q Value] =
+MAX(mart_text_signals[q_value])
+
+// TXT_008 | Folder: 06 Text Signals | Pages: P07 | Format: 0.0%
+[Text Matched Rate %] =
+DIVIDE(SUM(mart_text_monthly[matched_listing_count]), SUM(mart_text_monthly[sale_valid_listing_count]))
+
+// TXT_009 | Folder: 06 Text Signals | Pages: P07 | Format: General
+[Strongest Positive Text Signal] =
+VAR UserMin = [Selected Min Valid N]
+VAR T = TOPN(1, FILTER(ALL(mart_text_signals), mart_text_signals[precision_status] = "PASS" && mart_text_signals[analysis_status] = "PASS" && mart_text_signals[sample_n] >= UserMin), mart_text_signals[adjusted_effect_pct], DESC, mart_text_signals[keyword_family], ASC)
+RETURN CONCATENATEX(T, mart_text_signals[keyword_display_name], ", ")
+
+// TXT_010 | Folder: 06 Text Signals | Pages: P07 | Format: General
+[Strongest Negative Text Signal] =
+VAR UserMin = [Selected Min Valid N]
+VAR T = TOPN(1, FILTER(ALL(mart_text_signals), mart_text_signals[precision_status] = "PASS" && mart_text_signals[analysis_status] = "PASS" && mart_text_signals[sample_n] >= UserMin), mart_text_signals[adjusted_effect_pct], ASC, mart_text_signals[keyword_family], ASC)
+RETURN CONCATENATEX(T, mart_text_signals[keyword_display_name], ", ")
+
+// SEG_001 | Folder: 07 Market Segments | Pages: P08 | Format: #,##0
+[Segment Count] =
+DISTINCTCOUNT(mart_segment_profile[segment_id])
+
+// SEG_002 | Folder: 07 Market Segments | Pages: P08 | Format: #,##0
+[Segment Assigned Listing N] =
+SUM(mart_segment_profile[listing_n])
+
+// SEG_003 | Folder: 07 Market Segments | Pages: P08 | Format: #,##0
+[Segment Listing N] =
+MAX(mart_segment_profile[listing_n])
+
+// SEG_004 | Folder: 07 Market Segments | Pages: P08 | Format: 0.0%
+[Segment Share %] =
+DIVIDE(MAX(mart_segment_profile[listing_share_pct]), 100.0)
+
+// SEG_005 | Folder: 07 Market Segments | Pages: P08 | Format: #,##0
+[Segment Median Asking PSM] =
+MAX(mart_segment_profile[median_asking_price_per_sqm_toman])
+
+// SEG_006 | Folder: 07 Market Segments | Pages: P08 | Format: #,##0.0
+[Segment Median Area] =
+MAX(mart_segment_profile[median_area_sqm])
+
+// SEG_007 | Folder: 07 Market Segments | Pages: P08 | Format: 0.0
+[Segment Relative Price Index] =
+MAX(mart_segment_profile[median_normalized_price_index])
+
+// SEG_008 | Folder: 07 Market Segments | Pages: P08 | Format: 0.0%
+[Segment Amenity Profile %] =
+DIVIDE(MAX(mart_segment_profile[amenity_profile_pct]), 100.0)
+
+// SEG_010 | Folder: 07 Market Segments | Pages: P08 | Format: 0.0%
+[Segment Monthly Share %] =
+VAR Denominator = SUMX(VALUES(dim_month[month_key]), CALCULATE(MAX(mart_segment_monthly_mix[month_total_n])))
+RETURN DIVIDE(SUM(mart_segment_monthly_mix[listing_n]), Denominator)
+
+// SEG_011 | Folder: 07 Market Segments | Pages: P08 | Format: General
+[Segmentation Method Label] =
+VAR Methods = CONCATENATEX(VALUES(mart_segment_profile[method_type]), mart_segment_profile[method_type], ", ")
+RETURN IF(CONTAINSSTRING(Methods, "rule_based_descriptive_typology"), "Market Types / Descriptive Typology", Methods)

@@ -1,0 +1,12 @@
+.git
+.venv
+__pycache__
+*.pyc
+.ipynb_checkpoints
+outputs
+external_data
+data
+notebooks
+reports
+dashboard
+tests

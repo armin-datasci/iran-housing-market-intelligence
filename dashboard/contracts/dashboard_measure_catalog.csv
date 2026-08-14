@@ -1,0 +1,159 @@
+﻿measure_id,measure_name,display_folder,page_ids,home_table,dax_expression,format_string,aggregation_or_filter_behavior,reliability_gate,semantic_note
+CTL_001,Selected Min Valid N,00 Controls,P01;P03;P04;P05;P06;P07;P08,z_Measures,"SELECTEDVALUE(p_MinValidN[MinValidN], 30)",0,Disconnected display threshold,Never lowers canonical reliability thresholds,Default 30.
+CTL_002,Active Location Level,00 Controls,P01;P04,z_Measures,"VAR NeighborhoodFiltered = ISFILTERED(dim_location[neighborhood_slug])
+VAR CityFiltered = ISFILTERED(dim_location[city_slug])
+RETURN
+    SWITCH(TRUE(), NeighborhoodFiltered, ""neighborhood"", CityFiltered, ""city"", ""national"")",General,Chooses one aggregate level to prevent double counting,City/Neighborhood slicers should be single-select or All,Critical: never sum national + city + neighborhood rows together.
+MKT_001,Trend Supply Listings,01 Market Trends,P01;P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        SUM(mart_market_monthly[deduplicated_listing_count]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )","#,##0",Additive only within one selected entity level,series_kind=price_and_supply,Deduplicated apartment-sale listing activity.
+MKT_002,Trend Raw Supply Listings,01 Market Trends,P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        SUM(mart_market_monthly[raw_listing_count]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )","#,##0",Additive only within one selected entity level,series_kind=price_and_supply,Raw pre-dedup listing activity.
+MKT_003,Trend Valid Price Listings,01 Market Trends,P01;P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        SUM(mart_market_monthly[price_listing_n]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )","#,##0",Single month/location grain after filters,Price reliability context,Validated asking-price-per-sqm row count.
+MKT_004,Trend Median Asking PSM,01 Market Trends,P01;P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[median_asking_price_per_sqm_toman]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )","#,##0",Non-additive median; use with month axis or single selected/latest month,Use [Trend Price Eligible],"Toman operational unit; asking price, not transaction price."
+MKT_005,Trend Supply MoM %,01 Market Trends,P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[deduplicated_supply_mom_pct]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )",0.0\%,Precomputed percentage points,Consecutive-month upstream logic,Do not average across arbitrary groups.
+MKT_006,Trend Price MoM %,01 Market Trends,P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[median_price_mom_pct]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )",0.0\%,Precomputed percentage points,Upstream price reliability,Do not interpret low-N points.
+MKT_007,Trend Duplicate Reduction %,01 Market Trends,P04,z_Measures,"VAR Level = [Active Location Level]
+RETURN
+    CALCULATE(
+        MAX(mart_market_monthly[duplicate_supply_reduction_rate]),
+        KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level)
+    )",0.0%,Source value is a ratio,Conservative same-month dedup,Cross-month repeats remain retained.
+MKT_008,Trend Price Eligible,01 Market Trends,P04,z_Measures,"VAR Level = [Active Location Level]
+VAR UserMin = [Selected Min Valid N]
+VAR N = CALCULATE(MAX(mart_market_monthly[price_listing_n]), KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level))
+VAR Reliable = CALCULATE(MAX(mart_market_monthly[price_reliable_flag]), KEEPFILTERS(mart_market_monthly[series_kind] = ""price_and_supply""),
+        KEEPFILTERS(mart_market_monthly[entity_level] = Level))
+RETURN IF(Reliable = TRUE() && N >= UserMin, 1, 0)",0,Display gate,Canonical price_reliable_flag AND selected N,Never turns an upstream unreliable row into reliable.
+MKT_009,Latest Supply Listings,01 Market Trends,P01,z_Measures,"VAR LatestMonth = MAXX(ALLSELECTED(dim_month), dim_month[month_key])
+RETURN CALCULATE([Trend Supply Listings], KEEPFILTERS(dim_month[month_key] = LatestMonth))","#,##0",Latest selected/core month,Same as Trend Supply Listings,For executive KPI.
+MKT_010,Latest Valid Price Listings,01 Market Trends,P01,z_Measures,"VAR LatestMonth = MAXX(ALLSELECTED(dim_month), dim_month[month_key])
+RETURN CALCULATE([Trend Valid Price Listings], KEEPFILTERS(dim_month[month_key] = LatestMonth))","#,##0",Latest selected/core month,Same as Trend Valid Price Listings,For executive KPI.
+MKT_011,Latest Median Asking PSM,01 Market Trends,P01,z_Measures,"VAR LatestMonth = MAXX(ALLSELECTED(dim_month), dim_month[month_key])
+RETURN CALCULATE([Trend Median Asking PSM], KEEPFILTERS(dim_month[month_key] = LatestMonth))","#,##0",Latest selected/core month,Same as Trend Median Asking PSM,For executive KPI.
+LOC_001,Location Asking PSM,02 Location & Temperature,P03,z_Measures,MAX(mart_location_market[median_asking_price_per_sqm_toman]),"#,##0",One location row,Use [Location Price Eligible],Asking price per sqm in Toman.
+LOC_002,Location Price N,02 Location & Temperature,P03,z_Measures,MAX(mart_location_market[valid_price_n]),"#,##0",One location row,,
+LOC_003,Location Price Eligible,02 Location & Temperature,P01;P03,z_Measures,"VAR UserMin = [Selected Min Valid N]
+VAR N = MAX(mart_location_market[valid_price_n])
+VAR CanonicalMin = COALESCE(MAX(mart_location_market[minimum_n_threshold]), 0)
+VAR RequiredN = MAX(UserMin, CanonicalMin)
+VAR Reliable = MAX(mart_location_market[reliable_flag])
+RETURN IF(Reliable = TRUE() && N >= RequiredN, 1, 0)",0,Display gate,"Canonical reliable_flag plus max(user N, canonical N)",User cannot weaken canonical map reliability.
+LOC_004,Reliable Neighborhood Count,02 Location & Temperature,P01;P03,z_Measures,"VAR UserMin = [Selected Min Valid N]
+RETURN
+    COUNTROWS(
+        FILTER(
+            mart_location_market,
+            mart_location_market[entity_level] = ""neighborhood""
+                && mart_location_market[price_map_available_flag] = TRUE()
+                && mart_location_market[reliable_flag] = TRUE()
+                && mart_location_market[valid_price_n] >= MAX(UserMin, mart_location_market[minimum_n_threshold])
+        )
+    )","#,##0",Count of display-eligible neighborhood rows,Canonical map reliability + selected N,
+LOC_005,Temperature Score,02 Location & Temperature,P01;P03,z_Measures,MAX(mart_location_market[market_temperature_score]),0.0,One location row,Use [Temperature Eligible],Listing-Market Temperature proxy.
+LOC_006,Cold Sort Score,02 Location & Temperature,P01;P03,z_Measures,-[Temperature Score],0.0,Sorting helper,Use only for COLD Top-N,Hidden measure.
+LOC_007,Temperature Sample N,02 Location & Temperature,P01;P03,z_Measures,MAX(mart_location_market[temperature_sample_n]),"#,##0",One location row,,
+LOC_008,Temperature Eligible,02 Location & Temperature,P01;P03,z_Measures,"VAR UserMin = [Selected Min Valid N]
+VAR N = MAX(mart_location_market[temperature_sample_n])
+VAR CanonicalMin = COALESCE(MAX(mart_location_market[temperature_minimum_n]), 0)
+VAR RequiredN = MAX(UserMin, CanonicalMin)
+VAR CanonicalEligible = MAX(mart_location_market[temperature_reliability_eligible_flag])
+RETURN IF(CanonicalEligible = TRUE() && N >= RequiredN, 1, 0)",0,Display gate,Upstream months/N reliability + selected N,Canonical temperature minimum remains at least 100 in final run.
+LOC_010,Temperature Price Trend % per Month,02 Location & Temperature,P03,z_Measures,MAX(mart_location_market[price_trend_pct_per_month]),0.0\%,Precomputed trend percentage points,,Asking-price trend.
+LOC_011,Temperature Listing Activity Trend % per Month,02 Location & Temperature,P03,z_Measures,MAX(mart_location_market[listing_activity_trend_pct_per_month]),0.0\%,Precomputed trend percentage points,,Platform listing activity; not physical inventory.
+QLT_001,Pipeline Readiness Status,03 Data Quality,P01;P02,z_Measures,"VAR FailRows = CALCULATE(COUNTROWS(dashboard_quality_status), dashboard_quality_status[overall_status] = ""FAIL"")
+VAR NonReadyRows = CALCULATE(COUNTROWS(dashboard_quality_status), dashboard_quality_status[ready] = FALSE())
+VAR ReviewRows = CALCULATE(COUNTROWS(dashboard_quality_status), dashboard_quality_status[overall_status] = ""REVIEW"")
+RETURN
+    IF(FailRows > 0 || NonReadyRows > 0, ""FAIL"", IF(ReviewRows > 0, ""READY / REVIEW"", ""READY / PASS""))",General,Global metadata status,No analytical slicer interaction,Separates readiness from documented REVIEW.
+QLT_002,Gold QA Status,03 Data Quality,P01;P02,z_Measures,"CALCULATE(SELECTEDVALUE(dashboard_quality_status[overall_status]), dashboard_quality_status[stage] = ""M4"", dashboard_quality_status[component] = ""Gold QA"")",General,Gold QA status,,Expected PASS.
+QLT_003,Quality Critical Failures,03 Data Quality,P02,z_Measures,"SUMX(dashboard_quality_status, COALESCE(dashboard_quality_status[critical_failures], 0))","#,##0",Global metadata count,,Must be zero for final release.
+QLT_004,Quality Review Count,03 Data Quality,P02,z_Measures,"SUMX(dashboard_quality_status, COALESCE(dashboard_quality_status[review_count], 0))","#,##0",Global metadata count,,Reviews remain visible.
+DRV_001,Driver Adjusted Effect %,04 Price Drivers & AVM,P05,z_Measures,MAX(mart_price_driver_effects[adjusted_effect_pct]),0.0\%,Fixed held-out partial contrast,sample_n >= selected N if desired,"Association/contrast, not causal."
+DRV_002,Driver CI Low %,04 Price Drivers & AVM,P05,z_Measures,MAX(mart_price_driver_effects[ci_lower_pct]),0.0\%,,,Conditional bootstrap interval / method as supplied upstream.
+DRV_003,Driver CI High %,04 Price Drivers & AVM,P05,z_Measures,MAX(mart_price_driver_effects[ci_upper_pct]),0.0\%,,,
+DRV_004,Driver Sample N,04 Price Drivers & AVM,P05,z_Measures,MAX(mart_price_driver_effects[sample_n]),"#,##0",,,
+DRV_005,Permutation Importance,04 Price Drivers & AVM,P05,z_Measures,MAX(mart_price_driver_importance[permutation_importance]),0.000,Held-out RMSE-log increase,sample_n context,"Predictive contribution, not causal importance."
+DRV_006,Permutation Importance SD,04 Price Drivers & AVM,P05,z_Measures,MAX(mart_price_driver_importance[permutation_importance_sd]),0.000,,,
+AVM_001,Primary Test R2 Log,04 Price Drivers & AVM,P05,z_Measures,"CALCULATE(MAX(mart_model_quality[r2_log]), mart_model_quality[record_type] = ""primary_diagnostics"", mart_model_quality[model_name] = ""ridge"", mart_model_quality[evaluation_split] = ""test"", mart_model_quality[is_primary_model] = TRUE())",0.000,Held-out test,,Research prototype metric.
+AVM_003,Primary Test Median APE %,04 Price Drivers & AVM,P05,z_Measures,"CALCULATE(MAX(mart_model_quality[median_ape_pct]), mart_model_quality[record_type] = ""primary_diagnostics"", mart_model_quality[model_name] = ""ridge"", mart_model_quality[evaluation_split] = ""test"", mart_model_quality[is_primary_model] = TRUE())",0.0\%,,,Value is stored in percentage points.
+AVM_004,Primary Test P90 APE %,04 Price Drivers & AVM,P05,z_Measures,"CALCULATE(MAX(mart_model_quality[p90_ape_pct]), mart_model_quality[record_type] = ""primary_diagnostics"", mart_model_quality[model_name] = ""ridge"", mart_model_quality[evaluation_split] = ""test"", mart_model_quality[is_primary_model] = TRUE())",0.0\%,,,
+AVM_005,Primary Test Within 30 %,04 Price Drivers & AVM,P05,z_Measures,"CALCULATE(MAX(mart_model_quality[within_30_pct]), mart_model_quality[record_type] = ""primary_diagnostics"", mart_model_quality[model_name] = ""ridge"", mart_model_quality[evaluation_split] = ""test"", mart_model_quality[is_primary_model] = TRUE())",0.0\%,,,Value is stored in percentage points.
+AVM_006,Primary Test N,04 Price Drivers & AVM,P05,z_Measures,"CALCULATE(MAX(mart_model_quality[n]), mart_model_quality[record_type] = ""primary_diagnostics"", mart_model_quality[model_name] = ""ridge"", mart_model_quality[evaluation_split] = ""test"", mart_model_quality[is_primary_model] = TRUE())","#,##0",,,
+SEL_001,Agency Listing N,05 Seller,P06,z_Measures,MAX(mart_seller_type[agency_n]),"#,##0",,,
+SEL_002,Personal Listing N,05 Seller,P06,z_Measures,MAX(mart_seller_type[personal_n]),"#,##0",,,
+SEL_005,Agency Median Asking PSM,05 Seller,P06,z_Measures,MAX(mart_seller_type[agency_median_asking_psm_toman]),"#,##0",,,
+SEL_006,Personal Median Asking PSM,05 Seller,P06,z_Measures,MAX(mart_seller_type[personal_median_asking_psm_toman]),"#,##0",,,
+SEL_007,Seller Raw Difference %,05 Seller,P06,z_Measures,MAX(mart_seller_type[raw_median_difference_pct]),0.0\%,Raw descriptive contrast,,Non-causal.
+SEL_008,Seller Adjusted Difference %,05 Seller,P06,z_Measures,MAX(mart_seller_type[adjusted_crossfit_difference_pct]),0.0\%,Fixed adjusted cross-fit contrast,,Non-causal; user-type slicer must not refit.
+SEL_009,Seller Adjusted CI Low %,05 Seller,P06,z_Measures,MAX(mart_seller_type[adjusted_ci_low_pct]),0.0\%,,,
+SEL_010,Seller Adjusted CI High %,05 Seller,P06,z_Measures,MAX(mart_seller_type[adjusted_ci_high_pct]),0.0\%,,,
+SEL_011,Selected Seller Listing N,05 Seller,P06,z_Measures,"VAR U = SELECTEDVALUE(dim_user_type[user_type])
+VAR A = MAX(mart_seller_type[agency_label])
+VAR P = MAX(mart_seller_type[personal_label])
+RETURN SWITCH(TRUE(), ISBLANK(U), [Agency Listing N] + [Personal Listing N], U = A, [Agency Listing N], U = P, [Personal Listing N], BLANK())","#,##0",Disconnected semantic selection,,Descriptive only.
+SEL_012,Selected Seller Median Asking PSM,05 Seller,P06,z_Measures,"VAR U = SELECTEDVALUE(dim_user_type[user_type])
+VAR A = MAX(mart_seller_type[agency_label])
+VAR P = MAX(mart_seller_type[personal_label])
+RETURN SWITCH(TRUE(), U = A, [Agency Median Asking PSM], U = P, [Personal Median Asking PSM], BLANK())","#,##0",Disconnected semantic selection,,Blank for All because a combined median is not published.
+TXT_001,Validated Text Signal Count,06 Text Signals,P07,z_Measures,"VAR UserMin = [Selected Min Valid N]
+RETURN COUNTROWS(FILTER(mart_text_signals, mart_text_signals[precision_status] = ""PASS"" && mart_text_signals[analysis_status] = ""PASS"" && mart_text_signals[sample_n] >= UserMin))","#,##0",,Manual precision PASS + analysis PASS,Expected six in final project.
+TXT_002,Text Adjusted Effect %,06 Text Signals,P07,z_Measures,MAX(mart_text_signals[adjusted_effect_pct]),0.0\%,Fixed controlled association,Validated signals only,Non-causal.
+TXT_003,Text CI Low %,06 Text Signals,P07,z_Measures,MAX(mart_text_signals[adjusted_ci_low_pct]),0.0\%,,,
+TXT_004,Text CI High %,06 Text Signals,P07,z_Measures,MAX(mart_text_signals[adjusted_ci_high_pct]),0.0\%,,,
+TXT_005,Text Manual Precision %,06 Text Signals,P07,z_Measures,MAX(mart_text_signals[manual_precision]),0.0%,,,Source is a 0-1 rate.
+TXT_006,Text Q Value,06 Text Signals,P07,z_Measures,MAX(mart_text_signals[q_value]),0.000,,,FDR-adjusted q-value.
+TXT_008,Text Matched Rate %,06 Text Signals,P07,z_Measures,"DIVIDE(SUM(mart_text_monthly[matched_listing_count]), SUM(mart_text_monthly[sale_valid_listing_count]))",0.0%,Weighted prevalence over selected months,,
+TXT_009,Strongest Positive Text Signal,06 Text Signals,P07,z_Measures,"VAR UserMin = [Selected Min Valid N]
+VAR T = TOPN(1, FILTER(ALL(mart_text_signals), mart_text_signals[precision_status] = ""PASS"" && mart_text_signals[analysis_status] = ""PASS"" && mart_text_signals[sample_n] >= UserMin), mart_text_signals[adjusted_effect_pct], DESC, mart_text_signals[keyword_family], ASC)
+RETURN CONCATENATEX(T, mart_text_signals[keyword_display_name], "", "")",General,Fixed validated signal,,
+TXT_010,Strongest Negative Text Signal,06 Text Signals,P07,z_Measures,"VAR UserMin = [Selected Min Valid N]
+VAR T = TOPN(1, FILTER(ALL(mart_text_signals), mart_text_signals[precision_status] = ""PASS"" && mart_text_signals[analysis_status] = ""PASS"" && mart_text_signals[sample_n] >= UserMin), mart_text_signals[adjusted_effect_pct], ASC, mart_text_signals[keyword_family], ASC)
+RETURN CONCATENATEX(T, mart_text_signals[keyword_display_name], "", "")",General,Fixed validated signal,,
+SEG_001,Segment Count,07 Market Segments,P08,z_Measures,DISTINCTCOUNT(mart_segment_profile[segment_id]),"#,##0",,,Expected five.
+SEG_002,Segment Assigned Listing N,07 Market Segments,P08,z_Measures,SUM(mart_segment_profile[listing_n]),"#,##0",,,At full profile context; avoid summing after duplicating rows.
+SEG_003,Segment Listing N,07 Market Segments,P08,z_Measures,MAX(mart_segment_profile[listing_n]),"#,##0",Per segment row,,
+SEG_004,Segment Share %,07 Market Segments,P08,z_Measures,"DIVIDE(MAX(mart_segment_profile[listing_share_pct]), 100.0)",0.0%,Per segment profile,,Source is percentage points.
+SEG_005,Segment Median Asking PSM,07 Market Segments,P08,z_Measures,MAX(mart_segment_profile[median_asking_price_per_sqm_toman]),"#,##0",,,Asking-price PSM.
+SEG_006,Segment Median Area,07 Market Segments,P08,z_Measures,MAX(mart_segment_profile[median_area_sqm]),"#,##0.0",,,Square meters.
+SEG_007,Segment Relative Price Index,07 Market Segments,P08,z_Measures,MAX(mart_segment_profile[median_normalized_price_index]),0.0,,,100 = local compatible reference.
+SEG_008,Segment Amenity Profile %,07 Market Segments,P08,z_Measures,"DIVIDE(MAX(mart_segment_profile[amenity_profile_pct]), 100.0)",0.0%,,,N/A applicability must remain visible.
+SEG_010,Segment Monthly Share %,07 Market Segments,P08,z_Measures,"VAR Denominator = SUMX(VALUES(dim_month[month_key]), CALCULATE(MAX(mart_segment_monthly_mix[month_total_n])))
+RETURN DIVIDE(SUM(mart_segment_monthly_mix[listing_n]), Denominator)",0.0%,Robust over one or multiple selected months,,
+SEG_011,Segmentation Method Label,07 Market Segments,P08,z_Measures,"VAR Methods = CONCATENATEX(VALUES(mart_segment_profile[method_type]), mart_segment_profile[method_type], "", "")
+RETURN IF(CONTAINSSTRING(Methods, ""rule_based_descriptive_typology""), ""Market Types / Descriptive Typology"", Methods)",General,,,Do not label as stable clusters when fallback is primary.

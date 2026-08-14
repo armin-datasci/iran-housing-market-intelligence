@@ -1,0 +1,2609 @@
+contract_version: silver-master-contract-v1
+dataset: silver_master
+stage: milestone_2_canonical_release
+expected_column_count: 196
+primary_key: source_row_id
+global_assumptions:
+  price_unit: toman_assumed_unconfirmed
+  price_observation_type: asking_price
+  raw_columns_preserved: true
+  no_blanket_zero_imputation: true
+  exact_coordinates_internal_only: true
+required_column_metadata:
+- column_name
+- business_meaning
+- raw_dtype
+- expected_dtype
+- unit
+- allowed_values
+- missing_meaning
+- cleaning_rule
+- quality_risk
+- owner
+columns:
+- column_name: cat2_slug
+  business_meaning: شناسه رده اصلی بازار در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: residential-sell | commercial-sell | residential-rent | commercial-rent
+    | temporary-rent | real-estate-services
+  missing_meaning: مقدار خام اصولاً الزامی است؛ Missing نشان‌دهنده نقص منبع یا خطای
+    ورود داده است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: cat3_slug
+  business_meaning: شناسه رده جزئی آگهی در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled slug domain | null where permitted
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: city_slug
+  business_meaning: شناسه متنی شهر در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled slug domain | null where permitted
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: neighborhood_slug
+  business_meaning: شناسه متنی محله در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled slug domain | null where permitted
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: created_at_month
+  business_meaning: زمان ماهانه ثبت آگهی به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: UTC_timestamp_or_source_datetime
+  allowed_values: datetime text matching %Y-%m-%d %H:%M:%S
+  missing_meaning: مقدار خام اصولاً الزامی است؛ Missing نشان‌دهنده نقص منبع یا خطای
+    ورود داده است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: user_type
+  business_meaning: نوع ثبت‌کننده آگهی، مانند شخصی یا کسب‌وکار.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: description
+  business_meaning: متن توضیحات آگهی.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: free text; UTF-8; empty/null permitted only as observed in source
+  missing_meaning: مقدار خام اصولاً الزامی است؛ Missing نشان‌دهنده نقص منبع یا خطای
+    ورود داده است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: متن آزاد، نویسه‌های فارسی/عربی، تبلیغات، اطلاعات متناقض و ریسک حریم
+    خصوصی.
+  owner: Phase 1 - Data Audit
+- column_name: title
+  business_meaning: عنوان آگهی.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: free text; UTF-8; empty/null permitted only as observed in source
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: متن آزاد، نویسه‌های فارسی/عربی، تبلیغات، اطلاعات متناقض و ریسک حریم
+    خصوصی.
+  owner: Phase 1 - Data Audit
+- column_name: rent_mode
+  business_meaning: 'حالت اجاره: مقطوع، توافقی یا مجانی.'
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: مقطوع | توافقی | مجانی | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: rent_value
+  business_meaning: مبلغ اجاره ماهانه خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman_per_month
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: rent_to_single
+  business_meaning: آیا اجاره به فرد مجرد مجاز است.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: rent_type
+  business_meaning: نوع اجاره طبق برچسب منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: price_mode
+  business_meaning: 'حالت قیمت: مقطوع، توافقی یا مجانی.'
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: مقطوع | توافقی | مجانی | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: price_value
+  business_meaning: قیمت فروش یا قیمت اصلی آگهی به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: credit_mode
+  business_meaning: 'حالت ودیعه: مقطوع، توافقی یا مجانی.'
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: مقطوع | توافقی | مجانی | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: credit_value
+  business_meaning: مبلغ ودیعه خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: rent_credit_transform
+  business_meaning: امکان تبدیل رهن و اجاره طبق منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: transformable_price
+  business_meaning: قابلیت تبدیل یا تغییر ساختار قیمت طبق منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: transformable_credit
+  business_meaning: مبلغ ودیعه قابل تبدیل ثبت‌شده در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: transformed_credit
+  business_meaning: مبلغ ودیعه تبدیل‌شده ثبت‌شده در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: transformable_rent
+  business_meaning: مبلغ اجاره قابل تبدیل ثبت‌شده در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman_per_month
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: transformed_rent
+  business_meaning: مبلغ اجاره تبدیل‌شده ثبت‌شده در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman_per_month
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: land_size
+  business_meaning: مساحت زمین به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: source_text; intended sqm/meter
+  allowed_values: numeric text in source domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: building_size
+  business_meaning: مساحت بنا یا مساحت اصلی ثبت‌شده به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: source_text; intended sqm/meter
+  allowed_values: numeric text in source domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: deed_type
+  business_meaning: نوع سند ملک.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: has_business_deed
+  business_meaning: وجود سند تجاری.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: floor
+  business_meaning: طبقه واحد به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: integer text | 30+ | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: rooms_count
+  business_meaning: تعداد اتاق به‌صورت برچسب خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: count
+  allowed_values: بدون اتاق | یک | دو | سه | چهار | پنج یا بیشتر | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: total_floors_count
+  business_meaning: تعداد کل طبقات ساختمان به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: count
+  allowed_values: integer text | 30+ | unselect | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: unit_per_floor
+  business_meaning: تعداد واحد در هر طبقه به‌صورت متن خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: integer text | more_than_8 | unselect | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: has_balcony
+  business_meaning: وجود بالکن یا وضعیت انتخاب آن.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | unselect | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_elevator
+  business_meaning: وجود آسانسور.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_warehouse
+  business_meaning: وجود انباری.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_parking
+  business_meaning: وجود پارکینگ.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: construction_year
+  business_meaning: سال ساخت شمسی یا برچسب بازه‌ای خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: Jalali_year
+  allowed_values: Jalali year text | قبل از ۱۳۷۰ | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: برچسب‌های سقف‌دار، مقادیر نامعقول، عدم موضوعیت و ابهام معنایی بین
+    انواع ملک.
+  owner: Phase 1 - Data Audit
+- column_name: is_rebuilt
+  business_meaning: بازسازی‌شده بودن ملک.
+  raw_dtype: String
+  expected_dtype: String
+  unit: boolean
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_water
+  business_meaning: وجود انشعاب آب.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_warm_water_provider
+  business_meaning: نوع یا وضعیت تأمین آب گرم.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_electricity
+  business_meaning: وجود انشعاب برق.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_gas
+  business_meaning: وجود انشعاب گاز.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_heating_system
+  business_meaning: نوع یا وضعیت سیستم گرمایش.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_cooling_system
+  business_meaning: نوع یا وضعیت سیستم سرمایش.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_restroom
+  business_meaning: نوع یا وضعیت سرویس بهداشتی.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_security_guard
+  business_meaning: وجود نگهبان یا خدمات حفاظتی.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_barbecue
+  business_meaning: وجود امکان باربیکیو.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: building_direction
+  business_meaning: جهت جغرافیایی ساختمان.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: has_pool
+  business_meaning: وجود استخر در ملک.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_jacuzzi
+  business_meaning: وجود جکوزی در ملک.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: has_sauna
+  business_meaning: وجود سونا در ملک.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: true | false | null
+  missing_meaning: ویژگی در آگهی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا وضعیت آن
+    نامشخص است؛ Missing معادل false نیست.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: Missing یا unselect ممکن است اشتباهاً به‌عنوان false تفسیر شود.
+  owner: Phase 1 - Data Audit
+- column_name: floor_material
+  business_meaning: جنس کف ملک.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: property_type
+  business_meaning: نوع ملک یا اقامتگاه طبق طبقه‌بندی منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-controlled categorical or text domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: regular_person_capacity
+  business_meaning: ظرفیت استاندارد نفرات اقامتگاه.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: source-defined non-negative count labels | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: extra_person_capacity
+  business_meaning: ظرفیت نفرات اضافه اقامتگاه.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: integer text | 30+ | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: تغییر دامنه منبع، برچسب ناشناخته، Missing بالا یا ناسازگاری بین رده‌ها.
+  owner: Phase 1 - Data Audit
+- column_name: cost_per_extra_person
+  business_meaning: هزینه پیشنهادی برای هر نفر اضافه در اقامت موقت.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: rent_price_on_regular_days
+  business_meaning: قیمت پیشنهادی اجاره در روزهای عادی.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: rent_price_on_special_days
+  business_meaning: قیمت پیشنهادی اجاره در روزهای خاص.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: rent_price_at_weekends
+  business_meaning: قیمت پیشنهادی اجاره در آخر هفته.
+  raw_dtype: String
+  expected_dtype: String
+  unit: toman
+  allowed_values: numeric text >= 0; Persian/Arabic/ASCII digits and separators may
+    occur
+  missing_meaning: مؤلفه قیمت برای رژیم آگهی موضوعیت ندارد، ثبت نشده، یا توافقی است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: واحد پول در مستند منبع تأیید نشده؛ احتمال توافقی/مجانی، جداکننده و
+    رقم فارسی/عربی؛ قیمت‌ها پیشنهادی‌اند.
+  owner: Phase 1 - Data Audit
+- column_name: location_latitude
+  business_meaning: عرض جغرافیایی خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: numeric text in source domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: مختصات ناقص، خارج از ایران، Placeholder یا نسبت‌داده‌شدن به شهر نادرست.
+  owner: Phase 1 - Data Audit
+- column_name: location_longitude
+  business_meaning: طول جغرافیایی خام.
+  raw_dtype: String
+  expected_dtype: String
+  unit: none
+  allowed_values: numeric text in source domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: مختصات ناقص، خارج از ایران، Placeholder یا نسبت‌داده‌شدن به شهر نادرست.
+  owner: Phase 1 - Data Audit
+- column_name: location_radius
+  business_meaning: شعاع عدم‌قطعیت موقعیت مکانی در منبع.
+  raw_dtype: String
+  expected_dtype: String
+  unit: source_text; intended sqm/meter
+  allowed_values: numeric text in source domain | null
+  missing_meaning: ویژگی ثبت نشده، برای نوع ملک موضوعیت ندارد، یا در منبع موجود نبوده
+    است.
+  cleaning_rule: حفظ مقدار خام برای ممیزی؛ تبدیل نوع در ستون مشتق‌شده جداگانه در Silver
+    انجام می‌شود.
+  quality_risk: مختصات ناقص، خارج از ایران، Placeholder یا نسبت‌داده‌شدن به شهر نادرست.
+  owner: Phase 1 - Data Audit
+- column_name: source_row_id
+  business_meaning: Stable 1-based row identifier assigned from Raw source order for
+    audit joins.
+  raw_dtype: N/A (derived)
+  expected_dtype: UInt32
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: analysis_month
+  business_meaning: Parsed listing month used for the project analysis window.
+  raw_dtype: N/A (derived)
+  expected_dtype: Date
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: title_normalized
+  business_meaning: 'Canonical M2 derived field: title_normalized.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: description_normalized
+  business_meaning: 'Canonical M2 derived field: description_normalized.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: property_family
+  business_meaning: Shared canonical property family derived from cat3_slug.
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: building_size_sqm
+  business_meaning: 'Canonical M2 derived field: building_size_sqm.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: sqm
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: land_size_sqm
+  business_meaning: 'Canonical M2 derived field: land_size_sqm.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: sqm
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: latitude
+  business_meaning: 'Canonical M2 derived field: latitude.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: decimal_degree
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: longitude
+  business_meaning: 'Canonical M2 derived field: longitude.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: decimal_degree
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: location_radius_m
+  business_meaning: 'Canonical M2 derived field: location_radius_m.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: regular_person_capacity_num
+  business_meaning: 'Canonical M2 derived field: regular_person_capacity_num.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: extra_person_capacity_num
+  business_meaning: 'Canonical M2 derived field: extra_person_capacity_num.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rooms_count_num
+  business_meaning: 'Canonical M2 derived field: rooms_count_num.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int8
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: construction_year_jalali
+  business_meaning: 'Canonical M2 derived field: construction_year_jalali.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: building_age_years
+  business_meaning: 'Canonical M2 derived field: building_age_years.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: year
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: floor_num
+  business_meaning: 'Canonical M2 derived field: floor_num.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: total_floors_count_num
+  business_meaning: 'Canonical M2 derived field: total_floors_count_num.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: unit_per_floor_num
+  business_meaning: 'Canonical M2 derived field: unit_per_floor_num.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Int16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rooms_count_censored_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: rooms_count_censored_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: construction_year_before_1370_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: construction_year_before_1370_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: construction_year_numeric_invalid_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: construction_year_numeric_invalid_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: floor_censored_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: floor_censored_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: total_floors_count_censored_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: total_floors_count_censored_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: total_floors_count_unselected_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: total_floors_count_unselected_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: unit_per_floor_censored_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: unit_per_floor_censored_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: unit_per_floor_unselected_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: unit_per_floor_unselected_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_balcony_unselected_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: has_balcony_unselected_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_value_toman
+  business_meaning: Canonical/typed monetary field price_value_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: credit_value_toman
+  business_meaning: Canonical/typed monetary field credit_value_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_value_toman
+  business_meaning: Canonical/typed monetary field rent_value_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: transformable_credit_toman
+  business_meaning: Canonical/typed monetary field transformable_credit_toman in the
+    project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: transformed_credit_toman
+  business_meaning: Canonical/typed monetary field transformed_credit_toman in the
+    project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: transformable_rent_toman
+  business_meaning: Canonical/typed monetary field transformable_rent_toman in the
+    project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: transformed_rent_toman
+  business_meaning: Canonical/typed monetary field transformed_rent_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: cost_per_extra_person_toman
+  business_meaning: Canonical/typed monetary field cost_per_extra_person_toman in
+    the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_price_on_regular_days_toman
+  business_meaning: Canonical/typed monetary field rent_price_on_regular_days_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_price_at_weekends_toman
+  business_meaning: Canonical/typed monetary field rent_price_at_weekends_toman in
+    the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_price_on_special_days_toman
+  business_meaning: Canonical/typed monetary field rent_price_on_special_days_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_to_single_bool
+  business_meaning: Typed Boolean interpretation of Raw field rent_to_single; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: transformable_price_bool
+  business_meaning: Typed Boolean interpretation of Raw field transformable_price;
+    unknown is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_credit_transform_bool
+  business_meaning: Typed Boolean interpretation of Raw field rent_credit_transform;
+    unknown is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_business_deed_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_business_deed; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_elevator_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_elevator; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_warehouse_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_warehouse; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_parking_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_parking; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: is_rebuilt_bool
+  business_meaning: Typed Boolean interpretation of Raw field is_rebuilt; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_water_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_water; unknown is
+    preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_electricity_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_electricity; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_gas_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_gas; unknown is
+    preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_security_guard_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_security_guard;
+    unknown is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_barbecue_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_barbecue; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_pool_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_pool; unknown is
+    preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_jacuzzi_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_jacuzzi; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_sauna_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_sauna; unknown is
+    preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: has_balcony_bool
+  business_meaning: Typed Boolean interpretation of Raw field has_balcony; unknown
+    is preserved as null.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: type_parse_error_count
+  business_meaning: 'Canonical M2 derived field: type_parse_error_count.'
+  raw_dtype: N/A (derived)
+  expected_dtype: UInt16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: is_core_analysis_period
+  business_meaning: 'Canonical M2 derived field: is_core_analysis_period.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: is_sale
+  business_meaning: 'Canonical M2 derived field: is_sale.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: is_long_term_rent
+  business_meaning: 'Canonical M2 derived field: is_long_term_rent.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: is_temporary_rent
+  business_meaning: 'Canonical M2 derived field: is_temporary_rent.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: market_regime
+  business_meaning: 'Canonical M2 derived field: market_regime.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: coordinate_pair_present
+  business_meaning: 'Canonical M2 derived field: coordinate_pair_present.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: coordinate_partial_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: coordinate_partial_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: geo_country_valid
+  business_meaning: 'Canonical M2 derived field: geo_country_valid.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: area_basis
+  business_meaning: 'Canonical M2 derived field: area_basis.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: primary_area_sqm
+  business_meaning: Canonical denominator area used only for compatible property categories.
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: sqm
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_status
+  business_meaning: 'Canonical M2 derived field: sale_price_status.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_clean_toman
+  business_meaning: Canonical/typed monetary field sale_price_clean_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_component_status
+  business_meaning: 'Canonical M2 derived field: rent_component_status.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: credit_component_status
+  business_meaning: 'Canonical M2 derived field: credit_component_status.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: long_term_rent_regime
+  business_meaning: 'Canonical M2 derived field: long_term_rent_regime.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_per_sqm_raw_toman
+  business_meaning: Canonical/typed monetary field price_per_sqm_raw_toman in the
+    project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: monthly_rent_clean_toman
+  business_meaning: Canonical/typed monetary field monthly_rent_clean_toman in the
+    project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: deposit_clean_toman
+  business_meaning: Canonical/typed monetary field deposit_clean_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_regime
+  business_meaning: Canonical sale/rent/service price-regime classification.
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_regime_rule_id
+  business_meaning: 'Canonical M2 derived field: price_regime_rule_id.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_regime_conflict_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: price_regime_conflict_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_regime_review_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: price_regime_review_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_regime_unclassified_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: price_regime_unclassified_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_regime_version
+  business_meaning: 'Canonical M2 derived field: price_regime_version.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: versioned project rule identifier
+  missing_meaning: Should not be missing for published Silver rows.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: exact_duplicate_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: exact_duplicate_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: exact_duplicate_excess_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: exact_duplicate_excess_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: same_month_duplicate_group_size
+  business_meaning: 'Canonical M2 derived field: same_month_duplicate_group_size.'
+  raw_dtype: N/A (derived)
+  expected_dtype: UInt32
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: same_month_duplicate_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: same_month_duplicate_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: same_month_duplicate_excess_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: same_month_duplicate_excess_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: probable_duplicate_cluster_id
+  business_meaning: Deterministic cluster id for high/medium probable duplicate candidates.
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: deduplication_confidence
+  business_meaning: 'Duplicate/ER confidence: exact, high, medium, or none.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: deduplication_rule_version
+  business_meaning: 'Canonical M2 derived field: deduplication_rule_version.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: versioned project rule identifier
+  missing_meaning: Should not be missing for published Silver rows.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: supply_keep_flag
+  business_meaning: Whether the row is retained in canonical listing-supply counts
+    after conservative same-month deduplication.
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: cross_month_repeat_row_count
+  business_meaning: 'Canonical M2 derived field: cross_month_repeat_row_count.'
+  raw_dtype: N/A (derived)
+  expected_dtype: UInt32
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: cross_month_repeat_month_count
+  business_meaning: 'Canonical M2 derived field: cross_month_repeat_month_count.'
+  raw_dtype: N/A (derived)
+  expected_dtype: UInt16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: cross_month_repeat_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: cross_month_repeat_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: cross_month_first_month
+  business_meaning: 'Canonical M2 derived field: cross_month_first_month.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: cross_month_last_month
+  business_meaning: 'Canonical M2 derived field: cross_month_last_month.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: effective_building_area_sqm
+  business_meaning: 'Canonical M2 derived field: effective_building_area_sqm.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: sqm
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: effective_land_area_sqm
+  business_meaning: 'Canonical M2 derived field: effective_land_area_sqm.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: sqm
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: effective_land_area_source
+  business_meaning: 'Canonical M2 derived field: effective_land_area_source.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: primary_area_required_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: primary_area_required_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: area_manual_review_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: area_manual_review_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: primary_area_missing_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: primary_area_missing_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: primary_area_nonpositive_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: primary_area_nonpositive_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: primary_area_outlier_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: primary_area_outlier_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: building_area_outlier_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: building_area_outlier_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: land_area_outlier_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: land_area_outlier_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_per_sqm_outlier_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: sale_price_per_sqm_outlier_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: monthly_rent_outlier_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: monthly_rent_outlier_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: deposit_outlier_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: deposit_outlier_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: outlier_area_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: outlier_area_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: outlier_price_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: outlier_price_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: outlier_year_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: outlier_year_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: outlier_rule_version
+  business_meaning: 'Canonical M2 derived field: outlier_rule_version.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: versioned project rule identifier
+  missing_meaning: Should not be missing for published Silver rows.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_analysis_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: sale_price_analysis_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_component_analysis_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: rent_component_analysis_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_total_price_analysis_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: sale_total_price_analysis_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_per_sqm_final_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: sale_price_per_sqm_final_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_final_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: rent_final_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: supply_analysis_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: supply_analysis_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: geo_aggregate_map_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: geo_aggregate_map_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: map_analysis_eligible_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: map_analysis_eligible_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_final_toman
+  business_meaning: Canonical/typed monetary field sale_price_final_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: sale_price_per_sqm_final_toman
+  business_meaning: Final eligible sale asking price per square meter in assumed toman.
+  raw_dtype: N/A (derived)
+  expected_dtype: Float64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: monthly_rent_final_toman
+  business_meaning: Canonical/typed monetary field monthly_rent_final_toman in the
+    project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: deposit_final_toman
+  business_meaning: Canonical/typed monetary field deposit_final_toman in the project's
+    assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_monthly_low_toman
+  business_meaning: Canonical/typed monetary field rent_equivalent_monthly_low_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_monthly_base_toman
+  business_meaning: Base-scenario monthly equivalent asking rent combining rent and
+    deposit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_monthly_high_toman
+  business_meaning: Canonical/typed monetary field rent_equivalent_monthly_high_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_deposit_low_toman
+  business_meaning: Canonical/typed monetary field rent_equivalent_deposit_low_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_deposit_base_toman
+  business_meaning: Canonical/typed monetary field rent_equivalent_deposit_base_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_deposit_high_toman
+  business_meaning: Canonical/typed monetary field rent_equivalent_deposit_high_toman
+    in the project's assumed toman unit.
+  raw_dtype: N/A (derived)
+  expected_dtype: Int64
+  unit: toman
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: rent_equivalent_rule_version
+  business_meaning: 'Canonical M2 derived field: rent_equivalent_rule_version.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: versioned project rule identifier
+  missing_meaning: Should not be missing for published Silver rows.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_unit
+  business_meaning: Operational currency-unit status; source remains unconfirmed.
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: price_observation_type
+  business_meaning: Asking-price observation label; not transaction price.
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: quality_issue_count
+  business_meaning: 'Canonical M2 derived field: quality_issue_count.'
+  raw_dtype: N/A (derived)
+  expected_dtype: UInt16
+  unit: count
+  allowed_values: documented by source/domain rule; null when unavailable or not applicable
+  missing_meaning: Null means unavailable, unknown, invalid for the metric, or not
+    applicable under the field contract.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: record_quality_review_flag
+  business_meaning: 'Boolean quality, review, censoring, or analytical-eligibility
+    indicator: record_quality_review_flag.'
+  raw_dtype: N/A (derived)
+  expected_dtype: Boolean
+  unit: none
+  allowed_values: true | false
+  missing_meaning: Should not be missing after the M2 canonical transformation; missing
+    indicates a pipeline issue.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: quality_rule_version
+  business_meaning: 'Canonical M2 derived field: quality_rule_version.'
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: versioned project rule identifier
+  missing_meaning: Should not be missing for published Silver rows.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2
+- column_name: silver_master_version
+  business_meaning: Version identifier of the published canonical Silver Master schema/rules.
+  raw_dtype: N/A (derived)
+  expected_dtype: String
+  unit: none
+  allowed_values: versioned project rule identifier
+  missing_meaning: Should not be missing for published Silver rows.
+  cleaning_rule: Created by the canonical Milestone 2 module responsible for this
+    field; Raw source values remain preserved separately.
+  quality_risk: Interpret only within its documented applicability and rule version;
+    do not treat null as zero/False unless explicitly defined.
+  owner: Milestone 2

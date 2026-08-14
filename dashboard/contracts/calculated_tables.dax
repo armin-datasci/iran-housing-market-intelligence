@@ -1,0 +1,10 @@
+// IHMI Power BI semantic helper tables. These do NOT change the frozen Gold 10+5 contract.
+
+z_Measures =
+DATATABLE("_", STRING, {{"IHMI"}})
+
+p_MinValidN =
+SELECTCOLUMNS(
+    GENERATESERIES(0, 500, 10),
+    "MinValidN", [Value]
+)
