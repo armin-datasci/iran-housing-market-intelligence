@@ -1,7 +1,7 @@
 # Executive Summary - Iran Housing Market Intelligence
 
-- **Report version:** `final-executive-summary-v2.2`
-- **Generated at (UTC):** `2026-08-13T13:15:14.013907+00:00`
+- **Report version:** `final-executive-summary-v2.3-public-fastapi-deployment`
+- **Generated at (UTC):** `2026-08-14T01:30:25.620849+00:00`
 - **Core analytical period:** `2024-05` to `2024-12` (8 months)
 - **Price observation:** listing asking price, not transaction price
 - **Operational currency:** Toman (`toman_assumed_unconfirmed`)
@@ -87,6 +87,8 @@ Adjusted effects are **model-implied associations/contrasts**. They are not shar
 ## 7. Management takeaway
 
 The core-period listing market is heterogeneous rather than uniformly hot or cold. National apartment-sale listing activity increased over the period, while the national median asking price per square meter changed much less. Local differences are substantial, so HOT/COLD rankings should be read together with sample size, asking-price trend, listing-activity trend, and reliability conditions. Predictive modeling confirms that location and structural property characteristics matter for prediction, but the evidence does not by itself establish causal price effects or investment recommendations.
+
+As a deployment bonus, the accepted Gold data products are also available through a public, read-only FastAPI service at `https://ihmi-fastapi.onrender.com`, with interactive Swagger documentation at `https://ihmi-fastapi.onrender.com/docs`. Public validation on **2026-08-14** returned `health=ok`, `gold_qa_status=PASS`, `marts=10`, `dimensions=5`, and HTTP `200` for `/docs`. The API does not expose exact listing coordinates and preserves the same interpretation boundaries as the analytical reports and dashboard.
 
 ---
 

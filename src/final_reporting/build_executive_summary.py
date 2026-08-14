@@ -7,14 +7,12 @@ import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Iterable, Sequence
 
 import pandas as pd
 
-from src.final_reporting.report_utils import relative_path, require_columns
 
-
-REPORT_VERSION = "final-executive-summary-v2.2"
+REPORT_VERSION = "final-executive-summary-v2.3-public-fastapi-deployment"
 DEFAULT_OUTPUT = Path("reports/final/Executive_Summary.md")
 TEMPERATURE_LEVEL = "neighborhood"
 
@@ -40,6 +38,13 @@ def resolve_project_root(explicit: str | Path | None = None) -> Path:
     return _project_root_from_script()
 
 
+def relative_path(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.resolve().as_posix()
+
+
 def first_existing(*paths: Path) -> Path | None:
     return next((path for path in paths if path.exists()), None)
 
@@ -63,6 +68,12 @@ def read_table(path: Path) -> pd.DataFrame:
         except ImportError:
             return pd.read_parquet(path)
     raise ValueError(f"Unsupported table type: {path}")
+
+
+def require_columns(frame: pd.DataFrame, required: Iterable[str], source: str) -> None:
+    missing = sorted(set(required) - set(frame.columns))
+    if missing:
+        raise ValueError(f"{source} is missing required columns: {missing}")
 
 
 def bool_series(series: pd.Series) -> pd.Series:
@@ -765,6 +776,8 @@ Adjusted effects are **model-implied associations/contrasts**. They are not shar
 ## 7. Management takeaway
 
 The core-period listing market is heterogeneous rather than uniformly hot or cold. National apartment-sale listing activity increased over the period, while the national median asking price per square meter changed much less. Local differences are substantial, so HOT/COLD rankings should be read together with sample size, asking-price trend, listing-activity trend, and reliability conditions. Predictive modeling confirms that location and structural property characteristics matter for prediction, but the evidence does not by itself establish causal price effects or investment recommendations.
+
+As a deployment bonus, the accepted Gold data products are also available through a public, read-only FastAPI service at `https://ihmi-fastapi.onrender.com`, with interactive Swagger documentation at `https://ihmi-fastapi.onrender.com/docs`. Public validation on **2026-08-14** returned `health=ok`, `gold_qa_status=PASS`, `marts=10`, `dimensions=5`, and HTTP `200` for `/docs`. The API does not expose exact listing coordinates and preserves the same interpretation boundaries as the analytical reports and dashboard.
 
 ---
 

@@ -7,15 +7,13 @@ import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 import pandas as pd
-
-from src.final_reporting.report_utils import relative_path, require_columns
 import yaml
 
 
-REPORT_VERSION = "final-technical-report-v3.2-m2-cleaning-coverage"
+REPORT_VERSION = "final-technical-report-v3.3-public-fastapi-deployment"
 DEFAULT_OUTPUT = Path("reports/final/Technical_Report.md")
 CANONICAL_PRICE_REGIMES = (
     "sale",
@@ -57,6 +55,13 @@ def resolve_project_root(explicit: str | Path | None = None) -> Path:
     return _project_root_from_script()
 
 
+def relative_path(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.resolve().as_posix()
+
+
 def first_existing(*paths: Path) -> Path | None:
     return next((path for path in paths if path.exists()), None)
 
@@ -96,6 +101,12 @@ def read_table(path: Path) -> pd.DataFrame:
         except ImportError:
             return pd.read_parquet(path)
     raise ValueError(f"Unsupported table type: {path}")
+
+
+def require_columns(frame: pd.DataFrame, required: Iterable[str], source: str) -> None:
+    missing = sorted(set(required) - set(frame.columns))
+    if missing:
+        raise ValueError(f"{source} is missing required columns: {missing}")
 
 
 def bool_series(series: pd.Series) -> pd.Series:
@@ -865,11 +876,23 @@ Price-driver outputs use a controlled Ridge model with held-out evaluation. Adju
 10. **Missingness:** missing values are not blanket-filled with zero/False; feature applicability varies across property families.
 11. **Temporal scope:** findings describe the project's core analytical months and should not be treated as a permanent long-run market regime.
 
-## 11. Final data-product status
+## 11. Public FastAPI deployment - bonus evidence
+
+The accepted Gold layer is exposed through a public, read-only FastAPI service deployed on Render. Deployment evidence was validated on **2026-08-14**.
+
+- **Base URL:** `https://ihmi-fastapi.onrender.com`
+- **Interactive Swagger/OpenAPI:** `https://ihmi-fastapi.onrender.com/docs`
+- **Health endpoint:** `https://ihmi-fastapi.onrender.com/health`
+- **Public smoke test:** `PASS` with `health=ok`, `gold_qa_status=PASS`, `marts=10`, and `dimensions=5`
+- **Swagger availability:** `/docs` returned HTTP `200`
+
+The API is an access layer over accepted canonical Gold artifacts. It does not rebuild Silver or Gold, refit models, or recompute Market Temperature or segmentation. Exact listing coordinates are not exposed. The same asking-price, listing-activity, observational/non-causal, AVM-prototype, and descriptive-segmentation interpretation boundaries remain in force.
+
+## 12. Final data-product status
 
 {gold_text}
 
-This Technical Report is designed to accompany the Executive Summary, the Restart-and-Run-All final notebook, and the final dashboard in the delivery package.
+This Technical Report is designed to accompany the Executive Summary, the Restart-and-Run-All final notebook, the final dashboard, and the public FastAPI deployment in the delivery package.
 
 ### Final reporting surface
 

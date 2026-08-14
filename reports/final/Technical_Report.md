@@ -1,7 +1,7 @@
 # Technical Report - Iran Housing Market Intelligence
 
-- **Report version:** `final-technical-report-v3.2-m2-cleaning-coverage`
-- **Generated at (UTC):** `2026-08-13T13:15:15.813958+00:00`
+- **Report version:** `final-technical-report-v3.3-public-fastapi-deployment`
+- **Generated at (UTC):** `2026-08-14T01:30:30.947849+00:00`
 - **Silver Master rows:** **1,000,000**
 - **Sale asking-price-per-sqm eligible rows:** **405,809**
 - **Rental-equivalent eligible rows:** **331,739**
@@ -206,11 +206,23 @@ Price-driver outputs use a controlled Ridge model with held-out evaluation. Adju
 10. **Missingness:** missing values are not blanket-filled with zero/False; feature applicability varies across property families.
 11. **Temporal scope:** findings describe the project's core analytical months and should not be treated as a permanent long-run market regime.
 
-## 11. Final data-product status
+## 11. Public FastAPI deployment - bonus evidence
+
+The accepted Gold layer is exposed through a public, read-only FastAPI service deployed on Render. Deployment evidence was validated on **2026-08-14**.
+
+- **Base URL:** `https://ihmi-fastapi.onrender.com`
+- **Interactive Swagger/OpenAPI:** `https://ihmi-fastapi.onrender.com/docs`
+- **Health endpoint:** `https://ihmi-fastapi.onrender.com/health`
+- **Public smoke test:** `PASS` with `health=ok`, `gold_qa_status=PASS`, `marts=10`, and `dimensions=5`
+- **Swagger availability:** `/docs` returned HTTP `200`
+
+The API is an access layer over accepted canonical Gold artifacts. It does not rebuild Silver or Gold, refit models, or recompute Market Temperature or segmentation. Exact listing coordinates are not exposed. The same asking-price, listing-activity, observational/non-causal, AVM-prototype, and descriptive-segmentation interpretation boundaries remain in force.
+
+## 12. Final data-product status
 
 Gold QA status=`PASS`, critical_failures=`0`, gold_data_contract_ready=`True`, marts=`10`, dimensions=`5`, physical_relationships=`13`.
 
-This Technical Report is designed to accompany the Executive Summary, the Restart-and-Run-All final notebook, and the final dashboard in the delivery package.
+This Technical Report is designed to accompany the Executive Summary, the Restart-and-Run-All final notebook, the final dashboard, and the public FastAPI deployment in the delivery package.
 
 ### Final reporting surface
 

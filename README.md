@@ -21,7 +21,7 @@ Silver Master
         ↓
 Gold
         ↓
-Dashboard / Reports / Final Notebook
+Dashboard / Reports / Final Notebook / Public FastAPI
 ```
 
 Canonical paths:
@@ -371,7 +371,7 @@ From the repository root:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
-python .\scriptsun_pipeline.py --start-at m1 --stop-after reports
+python .\scripts\run_pipeline.py --start-at m1 --stop-after reports
 ```
 
 Canonical orchestrator:
@@ -466,6 +466,7 @@ iran-housing-market-intelligence/
 │       ├── metadata/
 │       └── qa/
 ├── src/
+│   ├── api/
 │   ├── common/
 │   ├── milestone_1/
 │   ├── milestone_2/
@@ -566,6 +567,30 @@ dashboard/handoff/
 Dashboard filters must respect the applicability of each upstream artifact. Fixed analytical estimates must not be implicitly refitted or recomputed by dashboard filtering.
 
 ---
+
+
+## Public FastAPI Deployment
+
+The accepted Gold layer is also exposed through a public, read-only FastAPI service deployed on Render. The deployment is a delivery/bonus access layer and does not rebuild Silver, rebuild Gold, refit models, or recompute analytical results.
+
+```text
+Base URL:        https://ihmi-fastapi.onrender.com
+Swagger / Docs:  https://ihmi-fastapi.onrender.com/docs
+Health Check:    https://ihmi-fastapi.onrender.com/health
+```
+
+Public deployment validation completed on **2026-08-14**:
+
+```text
+IHMI FASTAPI SMOKE TEST: PASS
+health: ok
+gold_qa_status: PASS
+marts: 10
+dimensions: 5
+Swagger /docs: HTTP 200
+```
+
+The API preserves the project interpretation and privacy contracts: asking prices are not transaction prices, listing activity is not physical inventory/liquidity/absorption, model outputs are observational/predictive rather than causal, and exact listing coordinates are not exposed.
 
 ## Decision Log
 
