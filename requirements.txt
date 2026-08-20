@@ -1,14 +1,27 @@
+# DEPENDENCIES
+
+## Data processing and columnar I/O
 polars
 pyarrow
 pandas
 numpy
+
+## Statistics and machine learning
 scipy
 scikit-learn
+joblib
+
+## Visualization
 matplotlib
+
+## Configuration and runtime QA
 PyYAML
 psutil
+
+## Notebook and testing
 jupyter
 pytest
+
+## API / deployment
 fastapi
 uvicorn
-joblib

@@ -8,6 +8,64 @@ The project is designed around four analytical pipelines that map directly to th
 
 > **Interpretation boundary:** all monetary values represent **listing asking prices**, not verified transaction prices. Listing activity represents observed platform activity and must not be interpreted as physical housing inventory, liquidity, or absorption.
 
+
+## Project at a Glance
+
+- **Recognition:** Awarded as the top MCI Academy capstone project in Summer 2026.
+- **Scale:** 1,000,000 raw real-estate listings processed into a 1,000,000-row canonical Silver Master.
+- **Analytical layer:** 10 Gold marts, 5 conformed dimensions, and 13 active single-direction relationships for reporting and BI.
+- **Quality and reproducibility:** canonical M1-to-reports pipeline validated, Gold QA passed, and 47 automated tests passed in the accepted release.
+- **Delivery surfaces:** Power BI, Streamlit, a reproducible Google Colab notebook, and a read-only FastAPI service.
+
+## Tech Stack
+
+| Area | Technologies / methods |
+|---|---|
+| Data engineering | Python, Polars, PyArrow, Pandas, NumPy, Parquet, CSV |
+| Statistics and ML | SciPy, scikit-learn, Ridge regression, cross-fitting, permutation importance, MiniBatchKMeans diagnostics |
+| Geospatial QA | ADM2 GeoJSON boundaries, point-in-polygon validation, stratified reverse-geocoding QA |
+| Visualization and BI | Matplotlib, Power BI, Streamlit |
+| Reproducibility and QA | JupyterLab, Google Colab, pytest, YAML/JSON contracts and manifests, SHA-256 validation |
+| API and deployment | FastAPI, Uvicorn, OpenAPI/Swagger, Render |
+
+## Quick Links
+
+| Surface | Link |
+|---|---|
+| Project landing page | https://amirrezaafzali.github.io/iran-housing-market-intelligence/ |
+| Live Streamlit dashboard | https://iran-housing-market-intelligence.streamlit.app/ |
+| Validated Google Colab | https://colab.research.google.com/drive/1qc-qQ5ciyIW5NhQjRCpn8XidoMG_2ahh |
+| Frozen runtime/data bundle | https://drive.google.com/file/d/1WM9CEy82MEHIq7mqnP1HvDigFPGLvmoH/view?usp=sharing |
+| Public FastAPI | https://ihmi-fastapi.onrender.com |
+| Swagger / OpenAPI docs | https://ihmi-fastapi.onrender.com/docs |
+
+## Data and Artifact Access
+
+The GitHub repository is the **source-code and documentation layer**. Large row-level data and generated analytical artifacts are intentionally kept outside Git history and restored from the frozen runtime bundle used by the validated Colab workflow.
+
+| Artifact | Canonical runtime path | Format | Runtime bundle | Git-tracked |
+|---|---|---|---|---|
+| Raw listings | `external_data/real_estate_ads.csv` | CSV | Yes | No |
+| External spatial reference | `external_data/reference/geoboundaries_irn_adm2.geojson` + metadata | GeoJSON / JSON | Yes | No |
+| Canonical Silver Master | `data/silver/silver_master.parquet` | Parquet | Yes | No |
+| Gold semantic layer | `data/gold/` | Parquet / CSV / JSON | Yes | No |
+| Analytical tables and QA | `outputs/tables/`, `outputs/qa/` | CSV / Parquet / JSON | Yes | No |
+| Model artifacts | `outputs/model_artifacts/` | Parquet / joblib / metadata | Yes | No |
+| Figures and maps | `outputs/figures/`, `outputs/maps/` | PNG / HTML | Yes | No |
+| Final written reports | `reports/final/` | Markdown | Not required | Yes |
+
+The raw source is approximately 781 MB and the accepted Silver Master approximately 356 MB, which is why these files are not committed directly to Git. Exact listing coordinates are never published in Gold, dashboards, or the public API.
+
+For a complete artifact inventory, restore instructions, and publication boundaries, see [`docs/DATA_AND_ARTIFACTS.md`](docs/DATA_AND_ARTIFACTS.md).
+
+### Reproducibility paths
+
+**Reviewer path (fastest):** use the landing page, live dashboard, and validated Colab links above.
+
+**Validated Colab path:** the notebook clones the source repository, installs declared dependencies, restores the frozen runtime bundle, validates runtime readiness, and replays the accepted evidence from a fresh runtime.
+
+**Full local pipeline path:** clone the repository, create a virtual environment, install `requirements.txt`, restore the runtime bundle to the project-relative paths above, then run `scripts/run_pipeline.py` from the repository root.
+
 ---
 
 ## Project Architecture
@@ -174,7 +232,7 @@ Spatial QA includes:
 - external ADM2 boundary point-in-polygon validation,
 - stratified and sanitized reverse-geocode validation,
 - coordinate-reuse and suspicious-location checks,
-- publication controls that exclude exact listing coordinates from Gold and the dashboard.
+- publication controls that exclude exact listing coordinates from Gold, the dashboard, and the public API.
 
 ### Interactive Market Map
 
@@ -448,7 +506,9 @@ JupyterLab should be launched from the repository root so the local hyperlink to
 
 ---
 
-## Repository Structure
+## Runtime Project Layout
+
+The tree below shows the **complete reproducible runtime layout**, not only files tracked by Git. `external_data/`, `data/`, and `outputs/` are restored/generated locally and remain outside Git history.
 
 ```text
 iran-housing-market-intelligence/
@@ -466,15 +526,35 @@ iran-housing-market-intelligence/
 │       ├── metadata/
 │       └── qa/
 ├── src/
-│   ├── api/
 │   ├── common/
 │   ├── milestone_1/
 │   ├── milestone_2/
 │   ├── milestone_3/
 │   ├── milestone_4/
-│   └── final_reporting/
+│   ├── final_reporting/
+│   └── api/
+│       ├── __init__.py
+│       ├── config.py
+│       ├── main.py
+│       ├── repository.py
+│       ├── schemas.py
+│       ├── docs/
+│       │   ├── FASTAPI_API.md
+│       │   └── DEPLOYMENT_EVIDENCE.md
+│       └── deployment/
+│           ├── .dockerignore
+│           ├── Dockerfile
+│           ├── README.md
+│           ├── requirements-api.txt
+│           └── api_data/gold/
+│               ├── marts/
+│               ├── dimensions/
+│               ├── qa/
+│               └── api_bundle_manifest.json
 ├── scripts/
-│   └── run_pipeline.py
+│   ├── run_pipeline.py
+│   ├── export_api_bundle.py
+│   └── smoke_test_api.py
 ├── notebooks/
 │   └── final_analysis.ipynb
 ├── outputs/
@@ -500,19 +580,23 @@ iran-housing-market-intelligence/
 
 ## Environment and Reproducibility
 
-Install dependencies using:
+`requirements.txt` declares the project's direct Python dependencies. Install and validate them with:
 
 ```powershell
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+python -m pip check
 ```
 
-The runtime environment is captured in:
+The accepted runtime also generates a resolved environment snapshot at:
 
 ```text
 outputs/qa/final_pipeline/environment_versions.json
 ```
 
-The environment snapshot records package/runtime information required for reproducibility without storing credentials, personal paths, or environment secrets.
+That artifact records the Python/runtime metadata plus installed versions of the declared/core distributions. The project deliberately does **not** invent version pins that were not captured by the validated run; reviewers can inspect the frozen snapshot in the runtime bundle for the resolved environment used by the accepted release.
+
+For the data/artifact restore path, see `docs/DATA_AND_ARTIFACTS.md`.
 
 ---
 
@@ -548,7 +632,7 @@ The following rules apply across Python outputs, the final notebook, reports, Go
 - Text-price signals are validated observational associations.
 - AVM outputs are research/prototype predictive diagnostics.
 - Market segments are descriptive market types.
-- Exact listing coordinates must not appear in Gold or the dashboard.
+- Exact listing coordinates must not appear in Gold, the dashboard, or the public API.
 
 ---
 
@@ -573,10 +657,29 @@ Dashboard filters must respect the applicability of each upstream artifact. Fixe
 
 The accepted Gold layer is also exposed through a public, read-only FastAPI service deployed on Render. The deployment is a delivery/bonus access layer and does not rebuild Silver, rebuild Gold, refit models, or recompute analytical results.
 
+API implementation and deployment assets are versioned inside the repository:
+
+```text
+src/api/main.py                         FastAPI application and public routes
+src/api/config.py                       Runtime and environment configuration
+src/api/repository.py                   Read-only canonical Gold access
+src/api/schemas.py                      API response schemas
+src/api/docs/FASTAPI_API.md             API usage and endpoint documentation
+src/api/docs/DEPLOYMENT_EVIDENCE.md     Public deployment validation evidence
+src/api/deployment/Dockerfile           Container definition used by Render
+src/api/deployment/requirements-api.txt Deployment-only Python dependencies
+src/api/deployment/api_data/gold/       Privacy-checked compact Gold bundle
+scripts/export_api_bundle.py            Rebuilds/validates the deployment bundle
+scripts/smoke_test_api.py               Local or public API smoke test
+```
+
+The deployment bundle contains only the accepted **10 canonical marts and 5 conformed dimensions** plus QA/manifest metadata required by the API. Exact listing coordinates are not included.
+
 ```text
 Base URL:        https://ihmi-fastapi.onrender.com
 Swagger / Docs:  https://ihmi-fastapi.onrender.com/docs
 Health Check:    https://ihmi-fastapi.onrender.com/health
+OpenAPI:         https://ihmi-fastapi.onrender.com/openapi.json
 ```
 
 Public deployment validation completed on **2026-08-14**:
@@ -629,6 +732,13 @@ The final project package contains:
 6. Demo / Presentation
 ```
 
+Bonus delivery surface:
+
+```text
+Public read-only FastAPI deployment on Render
+https://ihmi-fastapi.onrender.com
+```
+
 Professor-facing written reports:
 
 ```text
@@ -638,6 +748,8 @@ reports/final/Technical_Report.md
 
 Task-level QA tables, manifests, model diagnostics, and validation artifacts are retained for auditability and technical defense.
 
+Large reproducibility artifacts are distributed through the frozen runtime/data bundle rather than Git history; see `docs/DATA_AND_ARTIFACTS.md`.
+
 ---
 
 ## Security Rules
@@ -645,6 +757,6 @@ Task-level QA tables, manifests, model diagnostics, and validation artifacts are
 - Do not commit secrets, passwords, API keys, or tokens.
 - Do not commit `.env`, private keys, or credential files.
 - Do not hard-code personal filesystem paths.
-- Do not publish exact listing coordinates in Gold or the dashboard.
+- Do not publish exact listing coordinates in Gold, the dashboard, or the public API.
 - Run the canonical pipeline from the repository root.
 - Keep analytical logic inside canonical source modules rather than duplicating it in the final notebook or Power BI.

@@ -11,8 +11,10 @@ from typing import Any, Iterable, Sequence
 
 import pandas as pd
 
+from src.final_reporting.publication_contract import validate_stage2_snapshot
 
-REPORT_VERSION = "final-executive-summary-v2.3-public-fastapi-deployment"
+
+REPORT_VERSION = "final-executive-summary-v2.4-stage2-complete"
 DEFAULT_OUTPUT = Path("reports/final/Executive_Summary.md")
 TEMPERATURE_LEVEL = "neighborhood"
 
@@ -777,8 +779,6 @@ Adjusted effects are **model-implied associations/contrasts**. They are not shar
 
 The core-period listing market is heterogeneous rather than uniformly hot or cold. National apartment-sale listing activity increased over the period, while the national median asking price per square meter changed much less. Local differences are substantial, so HOT/COLD rankings should be read together with sample size, asking-price trend, listing-activity trend, and reliability conditions. Predictive modeling confirms that location and structural property characteristics matter for prediction, but the evidence does not by itself establish causal price effects or investment recommendations.
 
-As a deployment bonus, the accepted Gold data products are also available through a public, read-only FastAPI service at `https://ihmi-fastapi.onrender.com`, with interactive Swagger documentation at `https://ihmi-fastapi.onrender.com/docs`. Public validation on **2026-08-14** returned `health=ok`, `gold_qa_status=PASS`, `marts=10`, `dimensions=5`, and HTTP `200` for `/docs`. The API does not expose exact listing coordinates and preserves the same interpretation boundaries as the analytical reports and dashboard.
-
 ---
 
 ### Canonical sources used
@@ -796,17 +796,25 @@ As a deployment bonus, the accepted Gold data products are also available throug
         text += f"- `gold_qa`: `{relative_path(gold_manifest_path, root)}`\n"
     text += "\nThis report builder does not refit models or recompute upstream analytical estimates; it summarizes accepted canonical outputs.\n"
 
-    _assert_english_only(text)
-    _assert_no_personal_paths(text)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    temp_output = output.with_name(f".{output.name}.tmp")
-    temp_output.write_text(text, encoding="utf-8")
-    os.replace(temp_output, output)
+    # The reviewed report in reports/final is the single publication source.
+    # Upstream artifacts are validated first; the report is never regenerated from
+    # a duplicate template under src/. If analytics drift, the publication contract
+    # fails and the report must be reviewed/versioned explicitly.
+    validate_stage2_snapshot(root)
+    if not output.is_file():
+        raise FileNotFoundError(f"Reviewed final Executive Summary not found: {output}")
+    publication_text = output.read_text(encoding="utf-8-sig")
+    if REPORT_VERSION not in publication_text:
+        raise RuntimeError(
+            f"Executive Summary version mismatch: expected {REPORT_VERSION!r} in {output}"
+        )
+    _assert_english_only(publication_text)
+    _assert_no_personal_paths(publication_text)
     return output
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build the final 2-3 page English Executive Summary Markdown from canonical IHMI artifacts.")
+    parser = argparse.ArgumentParser(description="Validate the reviewed final English Executive Summary against canonical IHMI artifacts.")
     parser.add_argument("--project-root", type=Path, default=None)
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--allow-unready-gold", action="store_true", help="Allow report generation when Gold QA is not ready (not recommended for final delivery).")
@@ -820,7 +828,7 @@ def main() -> int:
         output_path=args.output,
         require_gold_ready=not args.allow_unready_gold,
     )
-    print(f"EXECUTIVE SUMMARY GENERATED: {path}")
+    print(f"EXECUTIVE SUMMARY VALIDATED: {path}")
     return 0
 
 

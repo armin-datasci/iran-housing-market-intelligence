@@ -319,15 +319,32 @@ def _num(value: float, digits: int = 2) -> str:
 
 
 def _write_interpretation(path: Path, *, row_count: int, core_rows: int, parity_mismatch: int, parity_pairs: int, sale_decade: dict[str, float | int], rent_decade: dict[str, float | int], deposit_decade: dict[str, float | int], transform: dict[str, float | int], cross: dict[str, float | int]) -> None:
-    text = f"""## Currency inference interpretation
+    text = f"""# Currency Scale and Operational Unit Decision
 
-The currency audit used all **{row_count:,}** rows in the project Silver candidate; **{core_rows:,}** rows belong to the May–December 2024 core period. No external price benchmark and no search for the words rial/toman is used. Raw-to-typed parity was checked across **{parity_pairs}** available monetary pairs and found **{parity_mismatch:,}** mismatches.
+## 1. Decision question
 
-Stage 1 tests whether a material 10x/0.1x subpopulation is visible inside comparable neighborhood cells. The near-0.1x / near-10x shares were **{_pct(float(sale_decade['near_one_tenth_share']))} / {_pct(float(sale_decade['near_ten_x_share']))}** for apartment-sale PSM, **{_pct(float(rent_decade['near_one_tenth_share']))} / {_pct(float(rent_decade['near_ten_x_share']))}** for apartment rent per sqm, and **{_pct(float(deposit_decade['near_one_tenth_share']))} / {_pct(float(deposit_decade['near_ten_x_share']))}** for apartment deposit per sqm. These patterns do not indicate a broad factor-of-ten unit mixture.
+The project separates the numerical-scale question from the absolute denomination-label question: whether the supplied monetary values require a project-wide `x10` or `/10` correction, and whether the dataset alone can prove Rial versus Toman. The audit uses all **{row_count:,}** Silver rows; **{core_rows:,}** belong to the May-December 2024 core period. It deliberately avoids an external housing-price benchmark and does not infer the unit from listing-text mentions.
 
-Stage 2 searches for hidden economic structure across independent fields and regimes. In **{int(transform['n']):,}** source rent-credit transformations, the median absolute delta ratio was **{float(transform['median']):.3f}**; **{_pct(float(transform['exact_base_share']))}** were exactly 0.030 and **{_pct(float(transform['sensitivity_share']))}** fell between 0.025 and 0.035. Separately, **{int(cross['cells']):,}** neighborhoods with at least {MIN_LOCAL_N} sale and {MIN_LOCAL_N} rental observations showed a **{float(cross['log_correlation']):.4f}** log-correlation between apartment sale asking PSM and 0.030 monthly rent-equivalent PSM. The median sale-to-monthly-equivalent ratio was **{float(cross['ratio_median']):.2f} months** (P05 **{float(cross['ratio_p05']):.2f}**, P95 **{float(cross['ratio_p95']):.2f}**).
+## 2. Stage 1 - Scale-integrity evidence
 
-**Inference:** the project data strongly support keeping the monetary scale exactly as supplied (`scale = 1`) and provide no internal justification for multiplying or dividing monetary values by 10. The operational project unit therefore remains **Toman**, while the formal source status remains **`toman_assumed_unconfirmed`**. This distinction is necessary because a global relabeling of every monetary column by the same factor cannot be identified from internal relationships alone.
+Raw-to-typed parity was checked across **{parity_pairs}** monetary pairs and found **{parity_mismatch:,}** mismatches. Comparable neighborhood cells were then tested for a material factor-of-ten mixture. Near-0.1x / near-10x shares were **{_pct(float(sale_decade['near_one_tenth_share']))} / {_pct(float(sale_decade['near_ten_x_share']))}** for apartment-sale PSM, **{_pct(float(rent_decade['near_one_tenth_share']))} / {_pct(float(rent_decade['near_ten_x_share']))}** for apartment rent per sqm, and **{_pct(float(deposit_decade['near_one_tenth_share']))} / {_pct(float(deposit_decade['near_ten_x_share']))}** for apartment deposit per sqm. These patterns do not support a broad `x10` or `/10` correction.
+
+## 3. Stage 2 - Internal economic-coherence evidence
+
+Across **{int(transform['n']):,}** source rent-credit transformations, the median absolute delta ratio was **{float(transform['median']):.3f}**; **{_pct(float(transform['exact_base_share']))}** were exactly 0.030 and **{_pct(float(transform['sensitivity_share']))}** fell between 0.025 and 0.035. This recovers a strong source-encoded relationship between rent and deposit components.
+
+Separately, **{int(cross['cells']):,}** neighborhoods with at least {MIN_LOCAL_N} eligible apartment-sale and {MIN_LOCAL_N} eligible rental observations showed a **{float(cross['log_correlation']):.4f}** log-correlation between apartment sale asking PSM and 0.030 monthly rent-equivalent PSM. The median sale-to-monthly-equivalent ratio was **{float(cross['ratio_median']):.2f} months** (P05 **{float(cross['ratio_p05']):.2f}**, P95 **{float(cross['ratio_p95']):.2f}**). These are internal economic-consistency diagnostics, not external market-price benchmarks.
+
+## 4. Identification boundary and final decision
+
+The combined evidence strongly supports keeping the supplied **numerical scale unchanged (`scale=1`)** and provides no internal justification for a project-wide factor-of-ten conversion. However, globally multiplying every monetary field by the same constant leaves correlations, rankings and many economic ratios unchanged. Internal relationships can therefore validate scale consistency and reject a broad mixed-unit problem, but cannot prove the absolute Rial/Toman label.
+
+- **Numerical scale:** keep `scale=1`.
+- **Project-wide x10 or /10 conversion:** not applied.
+- **Observation type:** listing asking price, not transaction price.
+- **Operational reporting unit:** Toman.
+- **Formal source status:** `toman_assumed_unconfirmed`.
+- **Future confirmation:** use a versioned migration and parity review rather than silently rewriting historical artifacts.
 """
     atomic_write_text(text, path)
 

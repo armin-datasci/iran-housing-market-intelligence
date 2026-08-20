@@ -10,10 +10,12 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import pandas as pd
+
+from src.final_reporting.publication_contract import validate_stage2_snapshot
 import yaml
 
 
-REPORT_VERSION = "final-technical-report-v3.3-public-fastapi-deployment"
+REPORT_VERSION = "final-technical-report-v4.0-stage2-complete"
 DEFAULT_OUTPUT = Path("reports/final/Technical_Report.md")
 CANONICAL_PRICE_REGIMES = (
     "sale",
@@ -876,23 +878,11 @@ Price-driver outputs use a controlled Ridge model with held-out evaluation. Adju
 10. **Missingness:** missing values are not blanket-filled with zero/False; feature applicability varies across property families.
 11. **Temporal scope:** findings describe the project's core analytical months and should not be treated as a permanent long-run market regime.
 
-## 11. Public FastAPI deployment - bonus evidence
-
-The accepted Gold layer is exposed through a public, read-only FastAPI service deployed on Render. Deployment evidence was validated on **2026-08-14**.
-
-- **Base URL:** `https://ihmi-fastapi.onrender.com`
-- **Interactive Swagger/OpenAPI:** `https://ihmi-fastapi.onrender.com/docs`
-- **Health endpoint:** `https://ihmi-fastapi.onrender.com/health`
-- **Public smoke test:** `PASS` with `health=ok`, `gold_qa_status=PASS`, `marts=10`, and `dimensions=5`
-- **Swagger availability:** `/docs` returned HTTP `200`
-
-The API is an access layer over accepted canonical Gold artifacts. It does not rebuild Silver or Gold, refit models, or recompute Market Temperature or segmentation. Exact listing coordinates are not exposed. The same asking-price, listing-activity, observational/non-causal, AVM-prototype, and descriptive-segmentation interpretation boundaries remain in force.
-
-## 12. Final data-product status
+## 11. Final data-product status
 
 {gold_text}
 
-This Technical Report is designed to accompany the Executive Summary, the Restart-and-Run-All final notebook, the final dashboard, and the public FastAPI deployment in the delivery package.
+This Technical Report is designed to accompany the Executive Summary, the Restart-and-Run-All final notebook, and the final dashboard in the delivery package.
 
 ### Final reporting surface
 
@@ -939,17 +929,25 @@ The professor-facing reporting layer is intentionally limited to two consolidate
     text += f"Rent/deposit sensitivity configuration source: `{rent_scenario_source}`.\n"
     text += "\nThis report builder does not refit statistical or machine-learning models; it summarizes accepted project artifacts and frozen methodological contracts.\n"
 
-    _assert_english_only(text)
-    _assert_no_personal_paths(text)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    temp_output = output.with_name(f".{output.name}.tmp")
-    temp_output.write_text(text, encoding="utf-8")
-    os.replace(temp_output, output)
+    # The reviewed report in reports/final is the single publication source.
+    # Upstream artifacts are validated first; the report is never regenerated from
+    # a duplicate template under src/. If analytics drift, the publication contract
+    # fails and the report must be reviewed/versioned explicitly.
+    validate_stage2_snapshot(root)
+    if not output.is_file():
+        raise FileNotFoundError(f"Reviewed final Technical Report not found: {output}")
+    publication_text = output.read_text(encoding="utf-8-sig")
+    if REPORT_VERSION not in publication_text:
+        raise RuntimeError(
+            f"Technical Report version mismatch: expected {REPORT_VERSION!r} in {output}"
+        )
+    _assert_english_only(publication_text)
+    _assert_no_personal_paths(publication_text)
     return output
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build the final English IHMI Technical Report Markdown from canonical QA, M2/M3, and Gold artifacts.")
+    parser = argparse.ArgumentParser(description="Validate the reviewed final English IHMI Technical Report against canonical QA, M2/M3, and Gold artifacts.")
     parser.add_argument("--project-root", type=Path, default=None)
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--allow-unready-gold", action="store_true", help="Allow report generation when Gold QA is not ready (not recommended for final delivery).")
@@ -963,7 +961,7 @@ def main() -> int:
         output_path=args.output,
         require_gold_ready=not args.allow_unready_gold,
     )
-    print(f"TECHNICAL REPORT GENERATED: {path}")
+    print(f"TECHNICAL REPORT VALIDATED: {path}")
     return 0
 
 
